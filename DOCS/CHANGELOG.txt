@@ -1,0 +1,28 @@
+1.0.0.el7 - May 25, 2015
+
+- All main modules fully integrated to the installer:
+
+  * Keystone.
+  * Glance.
+  * Cinder.
+  * Neutron.
+  * Nova.
+  * Horizon.
+
+- Keystone module installer adapted from Juno version in order to use apache mod-wsgi
+  instead of keystone servlets.
+
+- Secondary modules fully integrated to the Kilo installer (from last juno-installer):
+
+  * Ceilometer.
+  * Heat.
+  * Trove.
+  * Sahara.
+
+- All new settings related to keystone and message queue adapted to Kilo installer.
+
+- Full usage of "openstack" python client instead of traditional keystone client in
+  keystone install modules. All users, roles, services, endpoints created by use of
+  openstack client.
+
+
