@@ -1,3 +1,7 @@
+1.0.1.el7 - May 30, 2015
+
+- Corrected database config errors for MariaDB.
+
 1.0.0.el7 - May 25, 2015
 
 - All main modules fully integrated to the installer:

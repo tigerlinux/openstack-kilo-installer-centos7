@@ -167,11 +167,11 @@ then
 		echo "CREATE DATABASE $keystonedbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'%' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'localhost' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'$keystonehost' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
-		#for extrahost in $extrakeystonehosts
-		#do
-		#	echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'$extrahost' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'$keystonehost' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
+		for extrahost in $extrakeystonehosts
+		do
+			echo "GRANT ALL ON $keystonedbname.* TO '$keystonedbuser'@'$extrahost' IDENTIFIED BY '$keystonedbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -181,11 +181,11 @@ then
 		echo "CREATE DATABASE $glancedbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'%' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'localhost' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'$glancehost' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
-		#for extrahost in $extraglancehosts
-		#do
-		#	echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'$extrahost' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'$glancehost' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
+		for extrahost in $extraglancehosts
+		do
+			echo "GRANT ALL ON $glancedbname.* TO '$glancedbuser'@'$extrahost' IDENTIFIED BY '$glancedbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -195,11 +195,11 @@ then
 		echo "CREATE DATABASE $cinderdbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'%' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'localhost' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'$cinderhost' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
-		#for extrahost in $extracinderhosts
-		#do
-		#	echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'$extrahost' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'$cinderhost' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
+		for extrahost in $extracinderhosts
+		do
+			echo "GRANT ALL ON $cinderdbname.* TO '$cinderdbuser'@'$extrahost' IDENTIFIED BY '$cinderdbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -209,11 +209,11 @@ then
 		echo "CREATE DATABASE $neutrondbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'%' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'localhost' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'$neutronhost' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
-		#for extrahost in $extraneutronhosts
-		#do
-		#	echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'$extrahost' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'$neutronhost' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
+		for extrahost in $extraneutronhosts
+		do
+			echo "GRANT ALL ON $neutrondbname.* TO '$neutrondbuser'@'$extrahost' IDENTIFIED BY '$neutrondbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -223,11 +223,11 @@ then
 		echo "CREATE DATABASE $novadbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'%' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'localhost' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'$novahost' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
-		#for extrahost in $extranovahosts
-		#do
-		#	echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'$extrahost' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'$novahost' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
+		for extrahost in $extranovahosts
+		do
+			echo "GRANT ALL ON $novadbname.* TO '$novadbuser'@'$extrahost' IDENTIFIED BY '$novadbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -237,11 +237,11 @@ then
 		echo "CREATE DATABASE $heatdbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'%' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'localhost' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'$heathost' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
-		#for extrahost in $extraheathosts
-		#do
-		#	echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'$extrahost' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'$heathost' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
+		for extrahost in $extraheathosts
+		do
+			echo "GRANT ALL ON $heatdbname.* TO '$heatdbuser'@'$extrahost' IDENTIFIED BY '$heatdbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -251,11 +251,11 @@ then
 		echo "CREATE DATABASE $horizondbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'%' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'localhost' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'$horizonhost' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
-		#for extrahost in $extrahorizonhosts
-		#do
-		#	echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'$extrahost' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'$horizonhost' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
+		for extrahost in $extrahorizonhosts
+		do
+			echo "GRANT ALL ON $horizondbname.* TO '$horizondbuser'@'$extrahost' IDENTIFIED BY '$horizondbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -265,11 +265,11 @@ then
 		echo "CREATE DATABASE $trovedbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'%' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'localhost' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'$trovehost' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
-		#for extrahost in $extratrovehosts
-		#do
-		#	echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'$extrahost' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'$trovehost' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
+		for extrahost in $extratrovehosts
+		do
+			echo "GRANT ALL ON $trovedbname.* TO '$trovedbuser'@'$extrahost' IDENTIFIED BY '$trovedbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
@@ -279,11 +279,11 @@ then
 		echo "CREATE DATABASE $saharadbname default character set utf8;"|$mysqlcommand
 		echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'%' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
 		echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'localhost' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
-		#echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'$saharahost' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
-		#for extrahost in $extrasaharahosts
-		#do
-		#	echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'$extrahost' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
-		#done
+		echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'$saharahost' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
+		for extrahost in $extrasaharahosts
+		do
+			echo "GRANT ALL ON $saharadbname.* TO '$saharadbuser'@'$extrahost' IDENTIFIED BY '$saharadbpass';"|$mysqlcommand
+		done
 		echo "FLUSH PRIVILEGES;"|$mysqlcommand
 		sync
 		sleep 5
