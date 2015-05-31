@@ -1,3 +1,7 @@
+1.0.2.el7 - May 31, 2015
+
+- Added ntfs-3g and ntfsprogs to the requeriments module.
+
 1.0.1.el7 - May 30, 2015
 
 - Corrected database config errors for MariaDB.

@@ -114,6 +114,10 @@ yum -y install python-openstackclient
 yum -y install spice-html5
 
 #
+# From v 1.0.2 - Kilo Installer
+yum -y install ntfsprogs ntfs-3g
+
+#
 # We configure tuned and ksm
 #
 	
