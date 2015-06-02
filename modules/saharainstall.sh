@@ -146,10 +146,10 @@ crudini --set /etc/sahara/sahara.conf keystone_authtoken project_name $keystones
 crudini --set /etc/sahara/sahara.conf keystone_authtoken username $saharauser
 crudini --set /etc/sahara/sahara.conf keystone_authtoken password $saharapass
 
-crudini --set /etc/sahara/sahara.conf oslo_concurrency lock_path "/var/lock/sahara"
+crudini --set /etc/sahara/sahara.conf oslo_concurrency lock_path "/var/oslock/sahara"
 
-mkdir -p /var/lock/sahara
-chown -R sahara.sahara /var/lock/sahara
+mkdir -p /var/oslock/sahara
+chown -R sahara.sahara /var/oslock/sahara
 
 #
 # Message Broker config for sahara. Again, based on our flavor selected inside the installer config file
@@ -213,7 +213,7 @@ echo ""
 
 sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head
 
-chown -R sahara.sahara /var/log/sahara /etc/sahara /var/lock/sahara
+chown -R sahara.sahara /var/log/sahara /etc/sahara /var/oslock/sahara
 
 echo ""
 echo "Done"

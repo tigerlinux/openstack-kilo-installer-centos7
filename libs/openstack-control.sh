@@ -418,7 +418,7 @@ status)
 	then
 		for i in $keystone_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -426,7 +426,7 @@ status)
 	then
 		for i in $swift_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -434,7 +434,7 @@ status)
 	then
 		for i in $glance_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -442,7 +442,7 @@ status)
 	then
 		for i in $cinder_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -450,7 +450,7 @@ status)
 	then
 		for i in $neutron_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -458,7 +458,7 @@ status)
 	then
 		for i in $nova_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -466,7 +466,7 @@ status)
 	then
 		for i in $ceilometer_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -474,7 +474,7 @@ status)
         then
                 for i in $heat_svc_start
                 do
-                        service $i status
+                        service $i status -n 0
                 done
         fi
 
@@ -482,7 +482,7 @@ status)
 	then
 		for i in $trove_svc_start
 		do
-			service $i status
+			service $i status -n 0
 		done
 	fi
 
@@ -490,7 +490,7 @@ status)
         then
                 for i in $sahara_svc_start
                 do
-                        service $i status
+                        service $i status -n 0
                 done
         fi
 

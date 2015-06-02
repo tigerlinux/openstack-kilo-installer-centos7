@@ -166,8 +166,8 @@ rm -fr /etc/glance \
 	/var/lib/keystone-signing-swift \
 	/var/lib/qpidd \
 	/etc/qpid \
-	/var/lock/cinder \
-	/var/lock/nova
+	/var/oslock/cinder \
+	/var/oslock/nova
 
 
 service crond restart

@@ -283,7 +283,7 @@ crudini --set /etc/nova/nova.conf neutron admin_password $neutronpass
 crudini --set /etc/nova/nova.conf DEFAULT api_paste_config /etc/nova/api-paste.ini
 crudini --set /etc/nova/nova.conf glance api_servers $glancehost:9292
 crudini --set /etc/nova/nova.conf glance host $glancehost
-crudini --set /etc/nova/nova.conf oslo_concurrency lock_path "/var/lock/nova"
+crudini --set /etc/nova/nova.conf oslo_concurrency lock_path "/var/oslock/nova"
 crudini --set /etc/nova/nova.conf neutron admin_tenant_name $keystoneservicestenant
 crudini --set /etc/nova/nova.conf DEFAULT metadata_host $novahost
 crudini --set /etc/nova/nova.conf DEFAULT security_group_api neutron
@@ -445,8 +445,8 @@ sync
 sleep 5
 sync
 
-mkdir -p /var/lock/nova
-chown -R nova.nova /var/lock/nova
+mkdir -p /var/oslock/nova
+chown -R nova.nova /var/oslock/nova
 
 #
 # We provision/update NOVA Database... only if we are not a compute node

@@ -1,3 +1,10 @@
+1.0.3.el7 - June 01, 2015
+
+- FIX in modules for nova, cinder, sahara and uninstall in order
+  to prevent lock directories deletion on boot/reboot.
+
+- Minor improvement on openstack-control.sh script.
+
 1.0.2.el7 - May 31, 2015
 
 - Added ntfs-3g and ntfsprogs to the requeriments module.

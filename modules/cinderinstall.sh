@@ -208,7 +208,7 @@ crudini --set /etc/cinder/cinder.conf keystone_authtoken user_domain_id default
 crudini --set /etc/cinder/cinder.conf keystone_authtoken project_name $keystoneservicestenant
 crudini --set /etc/cinder/cinder.conf keystone_authtoken username $cinderuser
 crudini --set /etc/cinder/cinder.conf keystone_authtoken password $cinderpass
-crudini --set /etc/cinder/cinder.conf oslo_concurrency lock_path "/var/lock/cinder"
+crudini --set /etc/cinder/cinder.conf oslo_concurrency lock_path "/var/oslock/cinder"
 
 # crudini --set /etc/cinder/cinder.conf DEFAULT notification_driver cinder.openstack.common.notifier.rpc_notifier
 # crudini --set /etc/cinder/cinder.conf DEFAULT control_exchange cinder
@@ -222,8 +222,8 @@ fi
 sync
 sleep 2
 
-mkdir -p /var/lock/cinder
-chown -R cinder.cinder /var/lock/cinder
+mkdir -p /var/oslock/cinder
+chown -R cinder.cinder /var/oslock/cinder
 mkdir -p /var/lib/cinder/volumes
 chown -R cinder.cinder /var/lib/cinder/volumes
 
