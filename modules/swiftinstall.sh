@@ -127,8 +127,6 @@ yum install -y openstack-swift-proxy \
 echo "Done"
 echo ""
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 source $keystone_admin_rc_file
 
 #
@@ -263,13 +261,11 @@ crudini --set /etc/swift/proxy-server.conf DEFAULT bind_port 8080
 crudini --set /etc/swift/proxy-server.conf DEFAULT user swift
 crudini --set /etc/swift/proxy-server.conf DEFAULT swift_dir /etc/swift
 crudini --set /etc/swift/proxy-server.conf DEFAULT workers $swiftworkers
-# crudini --set /etc/swift/proxy-server.conf "pipeline:main" pipeline "catch_errors gatekeeper healthcheck proxy-logging cache authtoken keystoneauth proxy-logging proxy-server"
 crudini --set /etc/swift/proxy-server.conf "pipeline:main" pipeline "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo proxy-logging proxy-server"
 crudini --set /etc/swift/proxy-server.conf "app:proxy-server" use "egg:swift#proxy"
 crudini --set /etc/swift/proxy-server.conf "app:proxy-server" allow_account_management true
 crudini --set /etc/swift/proxy-server.conf "app:proxy-server" account_autocreate true
 crudini --set /etc/swift/proxy-server.conf "filter:keystoneauth" use "egg:swift#keystoneauth"
-# crudini --set /etc/swift/proxy-server.conf "filter:keystoneauth" operator_roles "Member,admin,swiftoperator"
 crudini --set /etc/swift/proxy-server.conf "filter:keystoneauth" operator_roles "$keystonememberrole,$keystoneadmintenant,swiftoperator"
 crudini --set /etc/swift/proxy-server.conf "filter:keystoneauth" reseller_admin_role $keystonereselleradminrole
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" paste.filter_factory "keystoneclient.middleware.auth_token:filter_factory"
@@ -279,9 +275,6 @@ crudini --set /etc/swift/proxy-server.conf "filter:authtoken" auth_token $SERVIC
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" admin_tenant_name $keystoneservicestenant
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" admin_user $swiftuser
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" admin_password $swiftpass
-# crudini --set /etc/swift/proxy-server.conf "filter:authtoken" auth_host $keystonehost
-# crudini --set /etc/swift/proxy-server.conf "filter:authtoken" auth_port 35357
-# crudini --set /etc/swift/proxy-server.conf "filter:authtoken" auth_protocol http
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" username $swiftuser
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" passwrod $swiftpass
 crudini --set /etc/swift/proxy-server.conf "filter:authtoken" auth_plugin password

@@ -1,6 +1,6 @@
 # Unattended Installer (Semi Automated) for OpenStack (KILO)
-Reynaldo P. R. Martinez
-E-Mail: TigerLinux@Gmail.com
+Reynaldo R. Martínez P.
+E-Mail: TigerLinux at Gmail dot com
 Caracas, Venezuela.
 
 ## Introduction
@@ -37,7 +37,7 @@ Additionally, there are some modules that are in default "no":
 * Swift *
 * Trove * 
 * Sahara *
-* SNMP *. 
+* SNMP *
 
 We recommend to activate swift install option "only If you are really going to use it". * Swift * alone is almost as extensive as OpenStack. Use if you REALLY know what you're doing and if you are REALLY going to use it. 
 
@@ -77,8 +77,7 @@ As mentioned before, you can use this installer for more complex designs. Exampl
 
 ### Controller node:
 
-If your controller node will include a compute service (controller +
-compute, or an all-in-one server), the following variable in the configuration file must be set to “no”:
+If your controller node will include a compute service (controller + compute, or an all-in-one server), the following variable in the configuration file must be set to “no”:
 
 ```bash
 nova_without_compute="no"
@@ -194,7 +193,7 @@ Through a configurable option in the installer configuration file (consoleflavor
 If you choose to install trove, this installation tool will install and configure all the software needed, but IT WILL NOT configure trove-ready images. That's part of your tasks as a Cloud Administrator.
 
 
-### Scripts Help
+### Support Scripts installed with this solution
 
 This installer will place a OpenStack Services control script in the “/usr/local/bin” path:
 
@@ -303,6 +302,10 @@ IMPORTANT NOTE: The installer disables Centos 7 SELINUX. We had found some bugs,
 
 As you can see in all cases, NTP and SSH are very important. Fail to configure those services correctly, and prepare to have a live full of misery.
 
+#### Debian 8:
+
+A debian 8 installer is in the works, but for now, we can deliver dates until we test the overall quality of the OpenStack packages in the third-party repos we are going to use. Stay tuned for further anouncements !!.
+
 
 ### Cinder:
 
@@ -408,7 +411,7 @@ The first way to call the uninstall process asks you "y/n" for continue or abort
 
 It is important to note that if the dbinstall="yes" option is used inside the installer configuration file, the uninstaller will remove not only the database engine but also all created databases.
 
-If you want to NOT REMOVE the databases created before, modify the "main-config.rc" and set the dbinstall option to “no”. This will make the preserve the databases.
+If you DON'T WANT TO REMOVE the databases created before, modify the "main-config.rc" and set the dbinstall option to “no”. This will make the preserve the databases.
 
 WARNING: If you are not careful, could end up removing databases and losing anything that you would like to backup. Consider yourself warned!.
 
@@ -429,7 +432,7 @@ If your system has multiple nodes (controller / compute) use the
 In the * Goodies * directory you will find some scripts (each with their respective readme). You can use with those scripts as you see fit with your OpenStack installation. View the scripts and their respective "readme files" to better understand how to use them!.
 
 
-### Endnotes
+### End notes
 
 This installer is originally configured to use Neutron FLAT existing networks but can be easily modified by you before or even after install in order to use GRE. As a matter of facts, the author of this tool had used it before to create large VLAN based OpenStack installations with multiple VLAN's.
 

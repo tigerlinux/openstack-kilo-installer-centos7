@@ -74,8 +74,6 @@ yum install -y openstack-heat-api \
 echo "Done"
 echo ""
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 source $keystone_admin_rc_file
 
 echo ""
@@ -139,16 +137,7 @@ crudini --set /etc/heat/heat.conf DEFAULT control_exchange openstack
 
 case $brokerflavor in
 "qpid")
-        # crudini --set /etc/heat/heat.conf DEFAULT rpc_backend heat.openstack.common.rpc.impl_qpid
 	crudini --set /etc/heat/heat.conf DEFAULT rpc_backend qpid
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_reconnect_interval_min 0
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_username $brokeruser
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_tcp_nodelay True
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_protocol tcp
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_hostname $messagebrokerhost
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_password $brokerpass
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_port 5672
-        crudini --set /etc/heat/heat.conf DEFAULT qpid_topology_version 1
 	crudini --set /etc/heat/heat.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/heat/heat.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/heat/heat.conf oslo_messaging_qpid qpid_username $brokeruser
@@ -159,14 +148,7 @@ case $brokerflavor in
         ;;
 
 "rabbitmq")
-        # crudini --set /etc/heat/heat.conf DEFAULT rpc_backend heat.openstack.common.rpc.impl_kombu
 	crudini --set /etc/heat/heat.conf DEFAULT rpc_backend rabbit
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_host $messagebrokerhost
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_userid $brokeruser
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_password $brokerpass
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_port 5672
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_use_ssl false
-        crudini --set /etc/heat/heat.conf DEFAULT rabbit_virtual_host $brokervhost
 	crudini --set /etc/heat/heat.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/heat/heat.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/heat/heat.conf oslo_messaging_rabbit rabbit_userid $brokeruser

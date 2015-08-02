@@ -1,3 +1,26 @@
+1.0.4.el7 - August 02, 2015
+
+- New option in cinder-config (main config file) to set or not LVM service
+  in cinder. You are no longer forced to have an LVM.
+- General clean-up for commented and deprecated options (mostly message broker
+  configs and some old-commented leftovers).
+- RDP (tcp 3389) included along ssh and icmp in default security ports for
+  Nova.
+- openstack-config eliminated from all code and libs. We'll stick with
+  crudini.
+- "_member_" correction in horizon config.
+- FIX for improper key-lenght for HEAT encription key. Key must be either -hex
+  24 of -hex 32.
+- Fixes for service_types (image/energy) in Ceilometer configuration.
+- Fixes for HEAT roles in HEAT configuration. Extra items added to main-config
+  too.
+- Options set in main-config and uninstall module in order to enforce proper
+  LVM clean-up for cinder at uninstall time.
+- Clean-up extra code for libvirt at uninstall time.
+- Some typos corrected in main readme.
+- Included extra documentation in "DOCS" folder. This documentation cover
+  vlans configuration in ovs and s/o for OpenStack.
+
 1.0.3.el7 - June 01, 2015
 
 - FIX in modules for nova, cinder, sahara and uninstall in order

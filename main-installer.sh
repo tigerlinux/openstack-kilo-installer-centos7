@@ -72,7 +72,7 @@ case $1 in
 	echo "Flavor: OpenStack KILO for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.0.3.el7 \"Leopardus Pardalis\" - June 01, 2015"
+	echo "Version 1.0.4.el7 \"Leopardus Pardalis\" - August 02, 2015"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"
@@ -201,8 +201,6 @@ case $1 in
 		OS_USERNAME=$keystoneadminuser
 		OS_TENANT_NAME=$keystoneadminuser
 		OS_PASSWORD=$keystoneadminpass
-		# OS_AUTH_URL="http://$keystonehost:35357/v2.0/"
-		# OS_AUTH_URL="http://$keystonehost:5000/v2.0/"
 		OS_AUTH_URL="http://$keystonehost:5000/v2.0"
 		OS_VOLUME_API_VERSION=2
 

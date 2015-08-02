@@ -70,8 +70,6 @@ yum -y install openstack-cinder targetcli python-oslo-db python-oslo-log MySQL-p
 systemctl enable lvm2-lvmetad.service
 systemctl start lvm2-lvmetad.service
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 source $keystone_admin_rc_file
 
 echo "Done"
@@ -113,18 +111,7 @@ crudini --set /etc/cinder/cinder.conf DEFAULT enable_v2_api true
 
 case $brokerflavor in
 "qpid")
-	# crudini --set /etc/cinder/cinder.conf DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid
 	crudini --set /etc/cinder/cinder.conf DEFAULT rpc_backend qpid
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_hostname $messagebrokerhost
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_username $brokeruser
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_password $brokerpass
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_reconnect_limit 0
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_reconnect true
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_reconnect_interval_min 0
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_reconnect_interval_max 0
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_heartbeat 60
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_protocol tcp
-	crudini --set /etc/cinder/cinder.conf DEFAULT qpid_tcp_nodelay True
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_qpid qpid_username $brokeruser
@@ -135,14 +122,7 @@ case $brokerflavor in
 	;;
 
 "rabbitmq")
-	# crudini --set /etc/cinder/cinder.conf DEFAULT rpc_backend cinder.openstack.common.rpc.impl_kombu
 	crudini --set /etc/cinder/cinder.conf DEFAULT rpc_backend rabbit
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_host $messagebrokerhost
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_port 5672
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_use_ssl false
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_userid $brokeruser
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_password $brokerpass
-	crudini --set /etc/cinder/cinder.conf DEFAULT rabbit_virtual_host $brokervhost
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_userid $brokeruser
@@ -155,25 +135,25 @@ case $brokerflavor in
 	;;
 esac
 
-# crudini --set /etc/cinder/cinder.conf DEFAULT iscsi_helper tgtadm
-# crudini --set /etc/cinder/cinder.conf DEFAULT volume_group cinder-volumes
-# crudini --set /etc/cinder/cinder.conf DEFAULT volume_driver cinder.volume.drivers.lvm.LVMISCSIDriver
 crudini --set /etc/cinder/cinder.conf DEFAULT logdir /var/log/cinder
 crudini --set /etc/cinder/cinder.conf DEFAULT state_path /var/lib/cinder
-# crudini --set /etc/cinder/cinder.conf DEFAULT lock_path /var/lib/cinder/tmp
-# crudini --set /etc/cinder/cinder.conf DEFAULT volumes_dir /etc/cinder/volumes
 crudini --set /etc/cinder/cinder.conf DEFAULT volumes_dir /var/lib/cinder/volumes/
 crudini --set /etc/cinder/cinder.conf DEFAULT rootwrap_config /etc/cinder/rootwrap.conf
-# crudini --set /etc/cinder/cinder.conf DEFAULT iscsi_ip_address $cinder_iscsi_ip_address
 
-crudini --set /etc/cinder/cinder.conf DEFAULT enabled_backends lvm
-crudini --set /etc/cinder/cinder.conf lvm volume_group cinder-volumes
-crudini --set /etc/cinder/cinder.conf lvm volume_driver cinder.volume.drivers.lvm.LVMVolumeDriver
-crudini --set /etc/cinder/cinder.conf lvm iscsi_protocol iscsi
-# crudini --set /etc/cinder/cinder.conf lvm iscsi_helper lioadm
-crudini --set /etc/cinder/cinder.conf lvm iscsi_helper tgtadm
-crudini --set /etc/cinder/cinder.conf lvm iscsi_ip_address $cinder_iscsi_ip_address
-crudini --set /etc/cinder/cinder.conf lvm volume_backend_name LVM_iSCSI
+case $cinderconfiglvm in
+"yes")
+	crudini --set /etc/cinder/cinder.conf DEFAULT enabled_backends lvm
+	crudini --set /etc/cinder/cinder.conf lvm volume_group $cinderlvmname
+	crudini --set /etc/cinder/cinder.conf lvm volume_driver cinder.volume.drivers.lvm.LVMVolumeDriver
+	crudini --set /etc/cinder/cinder.conf lvm iscsi_protocol iscsi
+	crudini --set /etc/cinder/cinder.conf lvm iscsi_helper tgtadm
+	crudini --set /etc/cinder/cinder.conf lvm iscsi_ip_address $cinder_iscsi_ip_address
+	crudini --set /etc/cinder/cinder.conf lvm volume_backend_name LVM_iSCSI
+	;;
+"*")
+	crudini --set /etc/cinder/cinder.conf DEFAULT enabled_backends ""
+	;;
+esac
 
 case $dbflavor in
 "mysql")
@@ -191,15 +171,6 @@ crudini --set /etc/cinder/cinder.conf database max_pool_size 10
 crudini --set /etc/cinder/cinder.conf database max_retries 100
 crudini --set /etc/cinder/cinder.conf database pool_timeout 10
 
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_host $keystonehost
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken admin_user $cinderuser
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken admin_password $cinderpass
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_port 35357
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_protocol http
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken signing_dirname /tmp/keystone-signing-cinder
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0/
-# crudini --set /etc/cinder/cinder.conf keystone_authtoken identity_uri http://$keystonehost:35357
 crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_url http://$keystonehost:35357
 crudini --set /etc/cinder/cinder.conf keystone_authtoken auth_plugin password
@@ -210,8 +181,6 @@ crudini --set /etc/cinder/cinder.conf keystone_authtoken username $cinderuser
 crudini --set /etc/cinder/cinder.conf keystone_authtoken password $cinderpass
 crudini --set /etc/cinder/cinder.conf oslo_concurrency lock_path "/var/oslock/cinder"
 
-# crudini --set /etc/cinder/cinder.conf DEFAULT notification_driver cinder.openstack.common.notifier.rpc_notifier
-# crudini --set /etc/cinder/cinder.conf DEFAULT control_exchange cinder
 
 if [ $ceilometerinstall == "yes" ]
 then
@@ -280,10 +249,16 @@ service iptables save
 # main installer stop further processing.
 #
 #
-# But beforce that, we setup our backend
-source $keystone_admin_rc_file
-cinder type-create lvm
-cinder type-key lvm set volume_backend_name=LVM_iSCSI
+# But before that, we setup our backend
+case $cinderconfiglvm in
+"yes")
+	source $keystone_admin_rc_file
+	cinder type-create lvm
+	cinder type-key lvm set volume_backend_name=LVM_iSCSI
+	;;
+"*")
+	;;
+esac
 
 testcinder=`rpm -qi openstack-cinder|grep -ci "is not installed"`
 if [ $testcinder == "1" ]

@@ -67,6 +67,12 @@ openstack role add --project $keystoneservicestenant --user $heatuser $keystonea
 echo "Heat User Role:"
 openstack role create $heat_stack_user_role
 
+echo "Heat Stack Owner"
+openstack role create $heat_stack_owner
+
+echo "Adding Admin User in Admin Project to Heat Stack Owner role"
+openstack role add --project $keystoneadmintenant --user $keystoneadminuser $heat_stack_owner
+
 echo "Heat and Heat-CloudFormation Services:"
 
 openstack service create \

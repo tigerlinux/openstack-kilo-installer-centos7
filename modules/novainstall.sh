@@ -98,8 +98,6 @@ else
 		openstack-selinux
 fi
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 #
 # rpm -ivh ./libs/spice-html5-0.1.4-1.el7.noarch.rpm
 
@@ -155,29 +153,6 @@ echo "Configuring NOVA"
 # Keystone NOVA Configuration
 #
 
-#if [ $nova_in_compute_node == "no" ]
-#then
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken paste.filter_factory "keystonemiddleware.auth_token:filter_factory"
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken auth_protocol http
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken auth_host $keystonehost
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken admin_tenant_name $keystoneservicestenant
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken auth_port 35357
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken admin_password $novapass
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken admin_user $novauser
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken auth_uri http://$keystonehost:5000/v2.0
-#	crudini --set /etc/nova/api-paste.ini filter:authtoken identity_uri http://$keystonehost:35357
-#fi
-
-# crudini --set /etc/nova/nova.conf keystone_authtoken auth_host $keystonehost
-# crudini --set /etc/nova/nova.conf keystone_authtoken auth_port 35357
-# crudini --set /etc/nova/nova.conf keystone_authtoken auth_protocol http
-# crudini --set /etc/nova/nova.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-# crudini --set /etc/nova/nova.conf keystone_authtoken admin_user $novauser
-# crudini --set /etc/nova/nova.conf keystone_authtoken admin_password $novapass
-# crudini --set /etc/nova/nova.conf keystone_authtoken signing_dir /tmp/keystone-signing-nova
-# crudini --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0
-# crudini --set /etc/nova/nova.conf keystone_authtoken identity_uri http://$keystonehost:35357
-
 crudini --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/nova/nova.conf keystone_authtoken auth_url http://$keystonehost:35357
 crudini --set /etc/nova/nova.conf keystone_authtoken auth_plugin password
@@ -187,8 +162,6 @@ crudini --set /etc/nova/nova.conf keystone_authtoken project_name $keystoneservi
 crudini --set /etc/nova/nova.conf keystone_authtoken username $novauser
 crudini --set /etc/nova/nova.conf keystone_authtoken password $novapass
 
-# crudini --set /etc/nova/nova.conf DEFAULT notification_driver nova.openstack.common.notifier.rpc_notifier
-
 #
 # Ceilometer NOVA configuration
 #
@@ -196,15 +169,6 @@ crudini --set /etc/nova/nova.conf keystone_authtoken password $novapass
 if [ $ceilometerinstall == "yes" ]
 then
 	crudini --set /etc/nova/nova.conf DEFAULT notification_driver messagingv2
-	#crudini --set /etc/nova/nova.conf DEFAULT notification_driver ceilometer.compute.nova_notifier
-        #case $brokerflavor in
-        #"qpid")
-        #         sed -r -i 's/ceilometer.compute.nova_notifier/ceilometer.compute.nova_notifier\nnotification_driver\ =\ nova.openstack.common.notifier.rpc_notifier/' /etc/nova/nova.conf
-        #         ;;
-        #"rabbitmq")
-        #        sed -r -i 's/ceilometer.compute.nova_notifier/ceilometer.compute.nova_notifier\nnotification_driver\ =\ nova.openstack.common.notifier.rpc_notifier/' /etc/nova/nova.conf
-        #        ;;
-        #esac
 	crudini --set /etc/nova/nova.conf DEFAULT instance_usage_audit True
 	crudini --set /etc/nova/nova.conf DEFAULT instance_usage_audit_period hour
 	crudini --set /etc/nova/nova.conf DEFAULT notify_on_state_change vm_and_task_state
@@ -218,7 +182,6 @@ crudini --set /etc/nova/nova.conf DEFAULT use_forwarded_for False
 crudini --set /etc/nova/nova.conf DEFAULT instance_usage_audit_period hour
 crudini --set /etc/nova/nova.conf DEFAULT logdir /var/log/nova
 crudini --set /etc/nova/nova.conf DEFAULT state_path /var/lib/nova
-# crudini --set /etc/nova/nova.conf DEFAULT lock_path /var/lib/nova/tmp
 crudini --set /etc/nova/nova.conf DEFAULT volumes_dir /etc/nova/volumes
 crudini --set /etc/nova/nova.conf DEFAULT dhcpbridge /usr/bin/nova-dhcpbridge
 crudini --set /etc/nova/nova.conf DEFAULT dhcpbridge_flagfile /etc/nova/nova.conf
@@ -288,6 +251,7 @@ crudini --set /etc/nova/nova.conf neutron admin_tenant_name $keystoneservicesten
 crudini --set /etc/nova/nova.conf DEFAULT metadata_host $novahost
 crudini --set /etc/nova/nova.conf DEFAULT security_group_api neutron
 crudini --set /etc/nova/nova.conf neutron admin_auth_url "http://$keystonehost:35357/v2.0"
+# Deprecated
 # crudini --set /etc/nova/nova.conf DEFAULT enabled_apis "ec2,osapi_compute,metadata"
 crudini --set /etc/nova/nova.conf neutron admin_username $neutronuser
 crudini --set /etc/nova/nova.conf service neutron_metadata_proxy True
@@ -310,11 +274,6 @@ crudini --set /etc/nova/nova.conf DEFAULT scheduler_default_filters "RetryFilter
 crudini --set /etc/nova/nova.conf DEFAULT novncproxy_port 6080
 crudini --set /etc/nova/nova.conf DEFAULT vncserver_listen $novahost
 crudini --set /etc/nova/nova.conf DEFAULT vnc_keymap $vnc_keymap
-# crudini --set /etc/nova/nova.conf DEFAULT force_config_drive true
-# crudini --set /etc/nova/nova.conf DEFAULT config_drive_format iso9660
-# crudini --set /etc/nova/nova.conf DEFAULT config_drive_cdrom true
-# crudini --set /etc/nova/nova.conf DEFAULT config_drive_inject_password True
-# crudini --set /etc/nova/nova.conf DEFAULT mkisofs_cmd genisoimage
 crudini --set /etc/nova/nova.conf DEFAULT dhcp_domain $dhcp_domain
 crudini --set /etc/nova/nova.conf DEFAULT neutron_default_tenant_id default
 
@@ -374,17 +333,7 @@ esac
 
 case $brokerflavor in
 "qpid")
-	# crudini --set /etc/nova/nova.conf DEFAULT rpc_backend nova.openstack.common.rpc.impl_qpid
 	crudini --set /etc/nova/nova.conf DEFAULT rpc_backend qpid
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_reconnect_interval_min 0
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_username $brokeruser
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_reconnect True
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_tcp_nodelay True
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_protocol tcp
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_hostname $messagebrokerhost
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_password $brokerpass
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_port 5672
-	crudini --set /etc/nova/nova.conf DEFAULT qpid_heartbeat 60
 	crudini --set /etc/nova/nova.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/nova/nova.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/nova/nova.conf oslo_messaging_qpid qpid_username $brokeruser
@@ -395,14 +344,7 @@ case $brokerflavor in
 	;;
 
 "rabbitmq")
-	# crudini --set /etc/nova/nova.conf DEFAULT rpc_backend nova.openstack.common.rpc.impl_kombu
 	crudini --set /etc/nova/nova.conf DEFAULT rpc_backend rabbit
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_host $messagebrokerhost
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_userid $brokeruser
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_password $brokerpass
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_port 5672
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_use_ssl false
-	crudini --set /etc/nova/nova.conf DEFAULT rabbit_virtual_host $brokervhost
 	crudini --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_userid $brokeruser
@@ -537,10 +479,11 @@ then
 	then
 		echo ""
 		echo "Creating VM's security groups"
-		echo "Ports: ssh and ICMP"
+		echo "Ports: ssh, rdp and ICMP"
 		echo ""
 		source $keystone_admin_rc_file
 		nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+		nova secgroup-add-rule default tcp 3389 3389 0.0.0.0/0
 		nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 		echo "Done"
 		echo ""

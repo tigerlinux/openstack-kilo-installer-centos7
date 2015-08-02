@@ -63,10 +63,7 @@ then
 		yum -y erase mysql
 		yum -y install mariadb-galera-server mariadb-galera-common mariadb-galera galera
 		yum -y install openstack-utils
-		cat ./libs/openstack-config > /usr/bin/openstack-config
 		crudini --set /etc/my.cnf.d/server.cnf mysqld max_allowed_packet 256M
-		# service mysqld start
-		# chkconfig mysqld on
 		systemctl enable mariadb.service
 		systemctl start mariadb.service
 		/usr/bin/mysqladmin -u $mysqldbadm password $mysqldbpassword > /dev/null 2>&1

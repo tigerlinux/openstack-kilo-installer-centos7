@@ -1,4 +1,4 @@
 Pendings:
 
-- Include "OpenStack Designate"
-- Incldue "OpenStack Ironic"
+- Include more cinder backends (NFS/GLUSTER)
+- Evaluate the inclusion of: designate, manila and ironic

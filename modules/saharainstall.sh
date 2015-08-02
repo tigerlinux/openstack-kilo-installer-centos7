@@ -74,8 +74,6 @@ yum install -y openstack-sahara \
 echo "Done"
 echo ""
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 source $keystone_admin_rc_file
 
 #

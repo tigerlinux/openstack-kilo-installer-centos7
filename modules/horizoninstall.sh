@@ -92,6 +92,7 @@ sed -r -i "s/CUSTOM_DASHBOARD_dashboard_timezone/$dashboard_timezone/" /etc/open
 sed -r -i "s/CUSTOM_DASHBOARD_keystonehost/$keystonehost/" /etc/openstack-dashboard/local_settings
 sed -r -i "s/CUSTOM_DASHBOARD_SERVICE_TOKEN/$SERVICE_TOKEN/" /etc/openstack-dashboard/local_settings
 sed -r -i "s/CUSTOM_DASHBOARD_keystonememberrole/$keystonememberrole/" /etc/openstack-dashboard/local_settings
+sed -r -i "s/OSINSTALLER_KEYSTONE_MEMBER/$keystonememberrole/" /etc/openstack-dashboard/local_settings
 
 if [ $vpnaasinstall == "yes" ]
 then
@@ -148,8 +149,6 @@ then
 		;;
 	esac
 
-	/usr/share/openstack-dashboard/manage.py syncdb --noinput
-	/usr/share/openstack-dashboard/manage.py createsuperuser --username=root --email=root@localhost.tld --noinput
 	mkdir -p /var/lib/dash/.blackhole
 	/usr/share/openstack-dashboard/manage.py syncdb --noinput
 	/usr/share/openstack-dashboard/manage.py createcachetable openstack_db_cache

@@ -183,6 +183,7 @@ rm -f /etc/httpd/conf.d/rootredirect.conf*
 rm -f /etc/cron.d/keystone-flush.crontab
 rm -f /etc/httpd/conf.d/wsgi-keystone.conf
 rm -rf /var/www/cgi-bin/keystone
+rm -f /etc/libvirt/qemu/$instance_name_template*.xml
 
 #
 # Restore original snmpd configuration
@@ -258,6 +259,13 @@ then
 		rm -f /root/.pgpass
 		;;
 	esac
+fi
+
+if [ $cindercleanatuninstall == "yes" ]
+then
+        echo ""
+        echo "Cleaning Up Cinder Volume LV: $cinderlvmname"
+        lvremove -f $cinderlvmname 2>/dev/null
 fi
 
 echo ""

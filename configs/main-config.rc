@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.3.el7 "Leopardus Pardalis"
-# June 01, 2015
+# Version: 1.0.4.el7 "Leopardus Pardalis"
+# August 02, 2015
 #
 
 #
@@ -264,14 +264,23 @@ cindersvce="cinder"
 cindersvcev2="cinderv2"
 cinderpass="P@ssw0rd"
 cinderemail="cinder@localhost"
+#
+# If you want to include the lvm backend, leave the following variable at "yes". Otherwise,
+# put "no" here:
+cinderconfiglvm="yes"
 # Our default is to use iscsi. Put here the iscsi server IP. It can be the one of the
 # controller, if you are using a LVM "cinder-volumes" inside the controller.
 cinder_iscsi_ip_address="192.168.50.13"
+cinderlvmname="cinder-volumes"
 # Only if you are using MySQL as DB backend. If for any chance, you have multiple
 # cinder hosts, put here the IP address of the extra hosts, space separated.
 # Normally, this is not necessary unless your mysql service access policies are very
 # strict.
 extracinderhosts=""
+#
+# The next variable controls if you want to clean-up all lv's at uninstall time.
+# the default is "yes", meaning, all lv's in the cinder-volumes vg will be erased.
+cindercleanatuninstall="yes"
 
 
 
@@ -411,7 +420,7 @@ vncserver_controller_address="192.168.50.13"
 # Keymap: User "us" or "es" here
 vnc_keymap="es"
 #
-# If "yes", our installer will create the nova/neutron security groups for icmp and ssh access
+# If "yes", our installer will create the nova/neutron security groups for icmp, ssh and rdp access
 vm_default_access="yes"
 # Also, we can create extra access for other tcp and udp ports
 vm_extra_ports_tcp="25 53 80 110 143 443"
@@ -508,8 +517,11 @@ stack_domain_admin="stack_domain_admin"
 stack_domain_admin_password="P@ssw0rd"
 stack_user_domain_name="heat_user_domain"
 heat_stack_user_role="heat_stack_user"
-# Regen the following variable by using: "openssl rand -hex 10"
-heatencriptionkey="e0dd8525f037e1b8cb6e"
+heat_stack_owner="heat_stack_owner"
+# Regen the following variable by using: "openssl rand -hex 24"
+# NOTE: For heat, the encription key MUST BE either 24 or 32 long. Use -hex 24 or -hex 32
+# in order to regenerate the key.
+heatencriptionkey="ea612f3b3c99d0be2fd520529faad36dc2a6b3a6d3f4e5b2"
 # Only if you are using MySQL as DB backend. If for any chance, you have multiple
 # heat hosts, put here the IP address of the extra hosts, space separated.
 # Normally, this is not necessary unless your mysql service access policies are very

@@ -66,8 +66,6 @@ echo "Installing Grance Packages"
 
 yum install -y openstack-glance openstack-utils openstack-selinux
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 echo "Listo"
 echo ""
 
@@ -86,7 +84,6 @@ sync
 
 crudini --set /etc/glance/glance-api.conf DEFAULT verbose False
 crudini --set /etc/glance/glance-api.conf DEFAULT debug False
-# crudini --set /etc/glance/glance-api.conf DEFAULT default_store file
 crudini --set /etc/glance/glance-api.conf glance_store default_store file
 crudini --set /etc/glance/glance-api.conf DEFAULT bind_host 0.0.0.0
 crudini --set /etc/glance/glance-api.conf DEFAULT bind_port 9292
@@ -126,7 +123,6 @@ crudini --set /etc/glance/glance-api.conf DEFAULT workers $glanceworkers
 crudini --set /etc/glance/glance-api.conf DEFAULT registry_host 0.0.0.0
 crudini --set /etc/glance/glance-api.conf DEFAULT registry_port 9191
 crudini --set /etc/glance/glance-api.conf DEFAULT registry_client_protocol http
-# crudini --set /etc/glance/glance-api.conf DEFAULT filesystem_store_datadir /var/lib/glance/images/
 crudini --set /etc/glance/glance-api.conf glance_store filesystem_store_datadir /var/lib/glance/images/
 crudini --set /etc/glance/glance-api.conf DEFAULT delayed_delete False
 crudini --set /etc/glance/glance-api.conf DEFAULT scrub_time 43200
@@ -136,24 +132,9 @@ crudini --set /etc/glance/glance-api.conf DEFAULT notification_driver messagingv
 case $brokerflavor in
 "qpid")
 	crudini --set /etc/glance/glance-api.conf DEFAULT notifier_strategy qpid
-	# crudini --set /etc/glance/glance-api.conf DEFAULT notification_driver glance.openstack.common.notifier.rpc_notifier
 	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_notification_exchange glance
-	# crudini --set /etc/glance/glance-api.conf DEFAULT rpc_backend glance.openstack.common.rpc.impl_qpid
 	crudini --set /etc/glance/glance-api.conf DEFAULT rpc_backend qpid
 	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_notification_topic notifications
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_hostname $messagebrokerhost
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_port 5672
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_username $brokeruser
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_password $brokerpass
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_reconnect_timeout 0
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_reconnect_limit 0
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_reconnect_interval_min 0
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_reconnect_interval_max 0
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_reconnect_interval 0
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_heartbeat 5
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_protocol tcp
-	crudini --set /etc/glance/glance-api.conf DEFAULT qpid_tcp_nodelay True
-	crudini --set /etc/glance/glance-api.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_qpid qpid_username $brokeruser
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_qpid qpid_password $brokerpass
@@ -164,18 +145,8 @@ case $brokerflavor in
 
 "rabbitmq")
 	crudini --set /etc/glance/glance-api.conf DEFAULT notifier_strategy rabbitmq
-	# crudini --set /etc/glance/glance-api.conf DEFAULT notification_driver glance.openstack.common.notifier.rpc_notifier
 	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_host $messagebrokerhost
-	# crudini --set /etc/glance/glance-api.conf DEFAULT rpc_backend glance.openstack.common.rpc.impl_kombu
 	crudini --set /etc/glance/glance-api.conf DEFAULT rpc_backend rabbit
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_port 5672
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_use_ssl false
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_userid $brokeruser
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_password $brokerpass
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_virtual_host $brokervhost
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_notification_exchange glance
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_notification_topic notifications
-	crudini --set /etc/glance/glance-api.conf DEFAULT rabbit_durable_queues False
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/glance/glance-api.conf oslo_messaging_rabbit rabbit_userid $brokeruser
@@ -188,14 +159,6 @@ case $brokerflavor in
 	;;
 esac
 
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_host $keystonehost
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_port 35357
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_protocol http
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken admin_user $glanceuser
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken admin_password $glancepass
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0/
-# crudini --set /etc/glance/glance-api.conf keystone_authtoken identity_uri http://$keystonehost:35357
 crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_url http://$keystonehost:35357
 crudini --set /etc/glance/glance-api.conf keystone_authtoken auth_plugin password
@@ -221,14 +184,6 @@ crudini --set /etc/glance/glance-registry.conf DEFAULT api_limit_max 1000
 crudini --set /etc/glance/glance-registry.conf DEFAULT limit_param_default 25
 
 crudini --set /etc/glance/glance-registry.conf paste_deploy flavor keystone
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_host $keystonehost
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_port 35357
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_protocol http
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken admin_user $glanceuser
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken admin_password $glancepass
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0/
-# crudini --set /etc/glance/glance-registry.conf keystone_authtoken identity_uri http://$keystonehost:35357
 crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_url http://$keystonehost:35357
 crudini --set /etc/glance/glance-registry.conf keystone_authtoken auth_plugin password

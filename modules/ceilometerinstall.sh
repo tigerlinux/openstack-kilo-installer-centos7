@@ -98,8 +98,6 @@ fi
 echo "Listo"
 echo ""
 
-cat ./libs/openstack-config > /usr/bin/openstack-config
-
 source $keystone_admin_rc_file
 
 #
@@ -120,8 +118,6 @@ then
 	service mongod start
 	chkconfig mongod on
 
-	# mongo --host $mondbhost --eval "db = db.getSiblingDB(\"$mondbname\");db.addUser({user: \"$mondbuser\",pwd: \"$mondbpass\",roles: [ \"readWrite\", \"dbAdmin\" ]})"
-	# The versions installed in KILO uses db.createUser instead of db.addUser
 	mongo --host $mondbhost --eval "db = db.getSiblingDB(\"$mondbname\");db.createUser({user: \"$mondbuser\",pwd: \"$mondbpass\",roles: [ \"readWrite\", \"dbAdmin\" ]})"
 
 	sync
@@ -196,7 +192,6 @@ crudini --set /etc/ceilometer/ceilometer.conf database connection "mongodb://$mo
 crudini --set /etc/ceilometer/ceilometer.conf database metering_time_to_live $mongodbttl
 crudini --set /etc/ceilometer/ceilometer.conf database time_to_live $mongodbttl
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT log_dir /var/log/ceilometer
-# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT notification_topics notifications,glance_notifications
 crudini --set /etc/ceilometer/ceilometer.conf rpc_notifier2 topics notifications,glance_notifications
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT policy_file policy.json
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT policy_default_rule default
@@ -204,16 +199,7 @@ crudini --set /etc/ceilometer/ceilometer.conf DEFAULT dispatcher database
 
 case $brokerflavor in
 "qpid")
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rpc_backend ceilometer.openstack.common.rpc.impl_qpid
 	crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rpc_backend qpid
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_hostname $messagebrokerhost
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_port 5672
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_username $brokeruser
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_password $brokerpass
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_heartbeat 60
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_protocol tcp
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_tcp_nodelay true
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_topology_version 1
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_qpid qpid_username $brokeruser
@@ -224,17 +210,7 @@ case $brokerflavor in
 	;;
 
 "rabbitmq")
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rpc_backend ceilometer.openstack.common.rpc.impl_kombu
 	crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rpc_backend rabbit
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_host $messagebrokerhost
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_port 5672
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_use_ssl false
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_userid $brokeruser
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_password $brokerpass
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_virtual_host $brokervhost
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_retry_interval 1
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_retry_backoff 2
-	# crudini --set /etc/ceilometer/ceilometer.conf DEFAULT rabbit_max_retries 0
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_rabbit rabbit_userid $brokeruser
@@ -265,8 +241,9 @@ crudini --set /etc/ceilometer/ceilometer.conf publisher_rpc metering_topic meter
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT instance_name_template $instance_name_template
 crudini --set /etc/ceilometer/ceilometer.conf service_types neutron network
 crudini --set /etc/ceilometer/ceilometer.conf service_types nova compute
-crudini --set /etc/ceilometer/ceilometer.conf service_types kwapi energy
 crudini --set /etc/ceilometer/ceilometer.conf service_types swift object-store
+crudini --set /etc/ceilometer/ceilometer.conf service_types glance images
+crudini --del /etc/ceilometer/ceilometer.conf service_types kwapi
 
 #
 # If this is NOT a compute node, and we are installing swift, then we reconfigure it
