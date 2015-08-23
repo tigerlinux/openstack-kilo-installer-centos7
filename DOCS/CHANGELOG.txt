@@ -1,3 +1,20 @@
+1.0.5.el7 - August 22, 2015
+
+- Bugfix: Incorrect crudini TAG's fixed for LBaaS service in neutron module.
+- Bugfix: Incorrect crudini TAG's fixed for heat service module.
+- Bugfix/Improvement: Missing crudini TAG in glance service when ceilometer
+  is to be installed. "if" condition added as an improvement for the messaging
+  driver.
+- Bugfix: Typo corrected in main readme about "Debian 8" upcomming installer.
+- Improvement: Extra "rc file" added with full admin endpoint to be used in
+  keystone.
+- Commented (but not erased yet) some remaining deprecated configs for old
+  olso-messaging and keystone-auth options, specially for cinder, trove and
+  sahara.
+- Bugfix: Incorrect crudini TAG for glance image service in ceilometer module.
+- Bugfix: Updated notification TAG in ceilometer module.
+- Added missing awsauth python dependency to ceilometer module.
+
 1.0.4.el7 - August 02, 2015
 
 - New option in cinder-config (main config file) to set or not LVM service

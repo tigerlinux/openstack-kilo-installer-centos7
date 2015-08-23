@@ -126,14 +126,13 @@ crudini --set /etc/sahara/sahara.conf DEFAULT control_exchange openstack
 # Keystone Sahara Config
 #
 
-crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_user $saharauser
-crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_password $saharapass
-crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_host $keystonehost
-crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_port 35357
-crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_protocol http
-#crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0/
-#crudini --set /etc/sahara/sahara.conf keystone_authtoken identity_uri http://$keystonehost:35357
+# Deprecated
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_user $saharauser
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken admin_password $saharapass
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_host $keystonehost
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_port 35357
+# crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_protocol http
 crudini --set /etc/sahara/sahara.conf keystone_authtoken signing_dir /tmp/keystone-signing-sahara
 crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/sahara/sahara.conf keystone_authtoken auth_url http://$keystonehost:35357
@@ -156,14 +155,15 @@ chown -R sahara.sahara /var/oslock/sahara
 case $brokerflavor in
 "qpid")
 	crudini --set /etc/sahara/sahara.conf DEFAULT rpc_backend qpid
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_reconnect_interval_min 0
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_username $brokeruser
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_tcp_nodelay True
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_protocol tcp
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_hostname $messagebrokerhost
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_password $brokerpass
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_port 5672
-	crudini --set /etc/sahara/sahara.conf DEFAULT qpid_topology_version 1
+	# Deprecated
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_reconnect_interval_min 0
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_username $brokeruser
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_tcp_nodelay True
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_protocol tcp
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_hostname $messagebrokerhost
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_password $brokerpass
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_port 5672
+	# crudini --set /etc/sahara/sahara.conf DEFAULT qpid_topology_version 1
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_qpid qpid_hostname $messagebrokerhost
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_qpid qpid_port 5672
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_qpid qpid_username $brokeruser
@@ -175,12 +175,13 @@ case $brokerflavor in
 
 "rabbitmq")
 	crudini --set /etc/sahara/sahara.conf DEFAULT rpc_backend rabbit
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_host $messagebrokerhost
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_userid $brokeruser
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_password $brokerpass
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_port 5672
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_use_ssl false
-	crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_virtual_host $brokervhost
+	# Deprecated
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_host $messagebrokerhost
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_userid $brokeruser
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_password $brokerpass
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_port 5672
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_use_ssl false
+	# crudini --set /etc/sahara/sahara.conf DEFAULT rabbit_virtual_host $brokervhost
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_rabbit rabbit_host $messagebrokerhost
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_rabbit rabbit_password $brokerpass
 	crudini --set /etc/sahara/sahara.conf oslo_messaging_rabbit rabbit_userid $brokeruser

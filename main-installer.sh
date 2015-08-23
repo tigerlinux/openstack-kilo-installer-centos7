@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Installer Script
-# Version: 1.0.3.el7 "Leopardus Pardalis"
-# June 01, 2015
+# Version: 1.0.5.el7 "Leopardus Pardalis"
+# Agosto 22, 2015
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -72,7 +72,7 @@ case $1 in
 	echo "Flavor: OpenStack KILO for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.0.4.el7 \"Leopardus Pardalis\" - August 02, 2015"
+	echo "Version 1.0.5.el7 \"Leopardus Pardalis\" - August 22, 2015"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"
@@ -213,6 +213,18 @@ case $1 in
 		echo "export OS_AUTH_URL=$OS_AUTH_URL" >> $keystone_admin_rc_file
 		echo "export OS_VOLUME_API_VERSION=2" >> $keystone_admin_rc_file
 		echo "PS1='[\u@\h \W(keystone_admin)]\$ '" >> $keystone_admin_rc_file
+
+        	OS_AUTH_URL_FULLADMIN="http://$keystonehost:35357/v2.0"
+
+        	echo "# export SERVICE_ENDPOINT=$SERVICE_ENDPOINT" > $keystone_fulladmin_rc_file
+        	echo "# export SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+        	echo "# export OS_SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+        	echo "export OS_USERNAME=$OS_USERNAME" >> $keystone_fulladmin_rc_file
+        	echo "export OS_PASSWORD=$OS_PASSWORD" >> $keystone_fulladmin_rc_file
+        	echo "export OS_TENANT_NAME=$OS_TENANT_NAME" >> $keystone_fulladmin_rc_file
+        	echo "export OS_AUTH_URL=$OS_AUTH_URL_FULLADMIN" >> $keystone_fulladmin_rc_file
+        	echo "export OS_VOLUME_API_VERSION=2" >> $keystone_fulladmin_rc_file
+        	echo "PS1='[\u@\h \W(keystone_fulladmin)]\$ '" >> $keystone_fulladmin_rc_file
 
 		mkdir -p /etc/openstack-control-script-config
 		date > /etc/openstack-control-script-config/keystone-installed

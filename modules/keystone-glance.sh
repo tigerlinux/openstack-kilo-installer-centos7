@@ -53,7 +53,7 @@ then
 fi
 
 
-source $keystone_admin_rc_file
+source $keystone_fulladmin_rc_file
 
 echo ""
 echo "Creating GLANCE Identities"

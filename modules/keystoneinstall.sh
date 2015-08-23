@@ -67,6 +67,18 @@ then
 	echo "export OS_VOLUME_API_VERSION=2" >> $keystone_admin_rc_file
 	echo "PS1='[\u@\h \W(keystone_admin)]\$ '" >> $keystone_admin_rc_file
 
+        OS_AUTH_URL_FULLADMIN="http://$keystonehost:35357/v2.0"
+
+        echo "# export SERVICE_ENDPOINT=$SERVICE_ENDPOINT" > $keystone_fulladmin_rc_file
+        echo "# export SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+        echo "# export OS_SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+        echo "export OS_USERNAME=$OS_USERNAME" >> $keystone_fulladmin_rc_file
+        echo "export OS_PASSWORD=$OS_PASSWORD" >> $keystone_fulladmin_rc_file
+        echo "export OS_TENANT_NAME=$OS_TENANT_NAME" >> $keystone_fulladmin_rc_file
+        echo "export OS_AUTH_URL=$OS_AUTH_URL_FULLADMIN" >> $keystone_fulladmin_rc_file
+        echo "export OS_VOLUME_API_VERSION=2" >> $keystone_fulladmin_rc_file
+        echo "PS1='[\u@\h \W(keystone_fulladmin)]\$ '" >> $keystone_fulladmin_rc_file
+
 	mkdir -p /etc/openstack-control-script-config
 	date > /etc/openstack-control-script-config/keystone-installed
 	date > /etc/openstack-control-script-config/keystone-extra-idents
@@ -301,11 +313,24 @@ echo "export OS_AUTH_URL=$OS_AUTH_URL" >> $keystone_admin_rc_file
 echo "export OS_VOLUME_API_VERSION=2" >> $keystone_admin_rc_file
 echo "PS1='[\u@\h \W(keystone_admin)]\$ '" >> $keystone_admin_rc_file
 
+OS_AUTH_URL_FULLADMIN="http://$keystonehost:35357/v2.0"
+
+echo "# export SERVICE_ENDPOINT=$SERVICE_ENDPOINT" > $keystone_fulladmin_rc_file
+echo "# export SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+echo "# export OS_SERVICE_TOKEN=$SERVICE_TOKEN" >> $keystone_fulladmin_rc_file
+echo "export OS_USERNAME=$OS_USERNAME" >> $keystone_fulladmin_rc_file
+echo "export OS_PASSWORD=$OS_PASSWORD" >> $keystone_fulladmin_rc_file
+echo "export OS_TENANT_NAME=$OS_TENANT_NAME" >> $keystone_fulladmin_rc_file
+echo "export OS_AUTH_URL=$OS_AUTH_URL_FULLADMIN" >> $keystone_fulladmin_rc_file
+echo "export OS_VOLUME_API_VERSION=2" >> $keystone_fulladmin_rc_file
+echo "PS1='[\u@\h \W(keystone_fulladmin)]\$ '" >> $keystone_fulladmin_rc_file
+
 #
 # Then we source the file, as we are goint to use it from now on
 #
 
-source $keystone_admin_rc_file
+# source $keystone_admin_rc_file
+source $keystone_fulladmin_rc_file
 
 echo "Keystone Main Identities Configured:"
 

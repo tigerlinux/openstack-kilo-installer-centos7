@@ -225,6 +225,34 @@ This script is called during the final phase of installation to clean all logs b
 This script must be included in every single OpenStack node (controller and compute nodes)
 
 
+### Keystone Environment Admin Variables
+
+This installer will place the following files in your OpenStack Nodes:
+
+```bash
+/root/keystonerc_admin
+/root/keystonerc_fulladmin
+```
+
+This files include your "admin" credentials (user/password included) along the URL endpoints for Keystone Service. The file first file use the normal public endpoint at port tcp 5000. The second one, uses the full admin port 35357.
+
+Sourcing the *keystonerc_admin* file in your environment will allow you to perform normal administration tasks, not included the ones related to keystone advanced tasks. Sourcing the *keystonerc_fulladmin* file in your environment will give you "super cow god-like powers" over your cloud installation.
+
+Then:
+
+Normal admin tasks:
+
+```bash
+source /root/keystonerc_admin
+```
+
+Super-cow god-like powers:
+
+```bash
+source /root/keystonerc_fulladmin
+```
+
+
 ### STARTING VIRTUAL MACHINES AVOIDING I/O STORMS
 
 If you suffer a total blackout and your cloud service goes completely down, and then try to start it including all virtual machines (instances), chances are that you will suffer a I/O storm. That can easily collapses all your servers or at least slow them down for a while.
@@ -304,7 +332,7 @@ As you can see in all cases, NTP and SSH are very important. Fail to configure t
 
 #### Debian 8:
 
-A debian 8 installer is in the works, but for now, we can deliver dates until we test the overall quality of the OpenStack packages in the third-party repos we are going to use. Stay tuned for further anouncements !!.
+A debian 8 installer is in the works, but for now, we can't deliver dates until we test the overall quality of the OpenStack packages in the third-party repos we are going to use. Stay tuned for further anouncements !!.
 
 
 ### Cinder:

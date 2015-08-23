@@ -85,18 +85,19 @@ sync
 # Using python based tools, we proceed to configure Cinder Services
 #
 
-crudini --set /etc/cinder/api-paste.ini filter:authtoken paste.filter_factory  "keystonemiddleware.auth_token:filter_factory"
-crudini --set /etc/cinder/api-paste.ini filter:authtoken service_protocol http
-crudini --set /etc/cinder/api-paste.ini filter:authtoken service_host $keystonehost
-crudini --set /etc/cinder/api-paste.ini filter:authtoken service_port 5000
-crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_protocol http
-crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_host $keystonehost
-crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_tenant_name $keystoneservicestenant
-crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_user $cinderuser
-crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_password $cinderpass
-crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_port 35357
-crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_uri http://$keystonehost:5000/v2.0/
-crudini --set /etc/cinder/api-paste.ini filter:authtoken identity_uri http://$keystonehost:35357
+# Deprecated
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken paste.filter_factory  "keystonemiddleware.auth_token:filter_factory"
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken service_protocol http
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken service_host $keystonehost
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken service_port 5000
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_protocol http
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_host $keystonehost
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_tenant_name $keystoneservicestenant
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_user $cinderuser
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken admin_password $cinderpass
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_port 35357
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken auth_uri http://$keystonehost:5000/v2.0/
+# crudini --set /etc/cinder/api-paste.ini filter:authtoken identity_uri http://$keystonehost:35357
 
 crudini --set /etc/cinder/cinder.conf DEFAULT osapi_volume_listen 0.0.0.0
 crudini --set /etc/cinder/cinder.conf DEFAULT api_paste_config /etc/cinder/api-paste.ini

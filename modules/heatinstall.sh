@@ -118,8 +118,9 @@ crudini --set /etc/heat/heat.conf DEFAULT heat_watch_server_url http://$heathost
 crudini --set /etc/heat/heat.conf DEFAULT heat_stack_user_role $heat_stack_user_role
 crudini --set /etc/heat/heat.conf DEFAULT auth_encryption_key $heatencriptionkey
 crudini --set /etc/heat/heat.conf DEFAULT use_syslog False
-crudini --set /etc/heat/heat.conf DEFAULT heat_api_cloudwatch bind_host 0.0.0.0
-crudini --set /etc/heat/heat.conf DEFAULT heat_api_cloudwatch bind_port 8003
+
+crudini --set /etc/heat/heat.conf heat_api_cloudwatch bind_host 0.0.0.0
+crudini --set /etc/heat/heat.conf heat_api_cloudwatch bind_port 8003
 
 crudini --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
 crudini --set /etc/heat/heat.conf keystone_authtoken admin_user $heatuser

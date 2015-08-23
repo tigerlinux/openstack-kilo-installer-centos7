@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.4.el7 "Leopardus Pardalis"
-# August 02, 2015
+# Version: 1.0.5.el7 "Leopardus Pardalis"
+# August 22, 2015
 #
 
 #
@@ -148,6 +148,7 @@ keystoneservicestenant="services"
 keystonememberrole="_member_"
 keystonereselleradminrole="ResellerAdmin"
 keystone_admin_rc_file="/root/keystonerc_admin"
+keystone_fulladmin_rc_file="/root/keystonerc_fulladmin"
 #
 # Token Provider Flavor. Two options: pki or uuid. There is some debate in the community about
 # the right flavor. Currently, it seems to be uuid so this is our default.

@@ -124,14 +124,15 @@ do
 	case $brokerflavor in
 	"qpid")
         	crudini --set $myconffile DEFAULT rpc_backend trove.openstack.common.rpc.impl_qpid
-	        crudini --set $myconffile DEFAULT qpid_reconnect_interval_min 0
-	        crudini --set $myconffile DEFAULT qpid_username $brokeruser
-	        crudini --set $myconffile DEFAULT qpid_tcp_nodelay True
-	        crudini --set $myconffile DEFAULT qpid_protocol tcp
-	        crudini --set $myconffile DEFAULT qpid_hostname $messagebrokerhost
-	        crudini --set $myconffile DEFAULT qpid_password $brokerpass
-	        crudini --set $myconffile DEFAULT qpid_port 5672
-	        crudini --set $myconffile DEFAULT qpid_topology_version 1
+		# Deprecated
+	        # crudini --set $myconffile DEFAULT qpid_reconnect_interval_min 0
+	        # crudini --set $myconffile DEFAULT qpid_username $brokeruser
+	        # crudini --set $myconffile DEFAULT qpid_tcp_nodelay True
+	        # crudini --set $myconffile DEFAULT qpid_protocol tcp
+	        # crudini --set $myconffile DEFAULT qpid_hostname $messagebrokerhost
+	        # crudini --set $myconffile DEFAULT qpid_password $brokerpass
+	        # crudini --set $myconffile DEFAULT qpid_port 5672
+	        # crudini --set $myconffile DEFAULT qpid_topology_version 1
 		crudini --set $myconffile oslo_messaging_qpid qpid_hostname $messagebrokerhost
 		crudini --set $myconffile oslo_messaging_qpid qpid_port 5672
 		crudini --set $myconffile oslo_messaging_qpid qpid_username $brokeruser
@@ -143,18 +144,19 @@ do
 
 	"rabbitmq")
 	        crudini --set $myconffile DEFAULT rpc_backend trove.openstack.common.rpc.impl_kombu
-        	crudini --set $myconffile DEFAULT rabbit_host $messagebrokerhost
-	        crudini --set $myconffile DEFAULT rabbit_userid $brokeruser
-	        crudini --set $myconffile DEFAULT rabbit_password $brokerpass
-	        crudini --set $myconffile DEFAULT rabbit_port 5672
-	        crudini --set $myconffile DEFAULT rabbit_use_ssl false
-	        crudini --set $myconffile DEFAULT rabbit_virtual_host $brokervhost
-		crudini --set $myconffile DEFAULT notifier_queue_userid $brokeruser
-		crudini --set $myconffile DEFAULT notifier_queue_password $brokerpass
-		crudini --set $myconffile DEFAULT notifier_queue_ssl false
-		crudini --set $myconffile DEFAULT notifier_queue_port 5672
-		crudini --set $myconffile DEFAULT notifier_queue_virtual_host $brokervhost
-		crudini --set $myconffile DEFAULT notifier_queue_transport memory
+		# Deprecated
+        	# crudini --set $myconffile DEFAULT rabbit_host $messagebrokerhost
+	        # crudini --set $myconffile DEFAULT rabbit_userid $brokeruser
+	        # crudini --set $myconffile DEFAULT rabbit_password $brokerpass
+	        # crudini --set $myconffile DEFAULT rabbit_port 5672
+	        # crudini --set $myconffile DEFAULT rabbit_use_ssl false
+	        # crudini --set $myconffile DEFAULT rabbit_virtual_host $brokervhost
+		# crudini --set $myconffile DEFAULT notifier_queue_userid $brokeruser
+		# crudini --set $myconffile DEFAULT notifier_queue_password $brokerpass
+		# crudini --set $myconffile DEFAULT notifier_queue_ssl false
+		# crudini --set $myconffile DEFAULT notifier_queue_port 5672
+		# crudini --set $myconffile DEFAULT notifier_queue_virtual_host $brokervhost
+		# crudini --set $myconffile DEFAULT notifier_queue_transport memory
 		crudini --set $myconffile oslo_messaging_rabbit rabbit_host $messagebrokerhost
 		crudini --set $myconffile oslo_messaging_rabbit rabbit_password $brokerpass
 		crudini --set $myconffile oslo_messaging_rabbit rabbit_userid $brokeruser
@@ -195,12 +197,13 @@ troveworkers=`grep processor.\*: /proc/cpuinfo |wc -l`
 
 crudini --set /etc/trove/trove.conf DEFAULT trove_api_workers $troveworkers
 
-crudini --set /etc/trove/trove.conf keystone_authtoken admin_tenant_name $troveuser
-crudini --set /etc/trove/trove.conf keystone_authtoken admin_user $troveuser
-crudini --set /etc/trove/trove.conf keystone_authtoken admin_password $trovepass
-crudini --set /etc/trove/trove.conf keystone_authtoken auth_host $keystonehost
-crudini --set /etc/trove/trove.conf keystone_authtoken auth_port 35357
-crudini --set /etc/trove/trove.conf keystone_authtoken auth_protocol http
+# Deprecated
+# crudini --set /etc/trove/trove.conf keystone_authtoken admin_tenant_name $troveuser
+# crudini --set /etc/trove/trove.conf keystone_authtoken admin_user $troveuser
+# crudini --set /etc/trove/trove.conf keystone_authtoken admin_password $trovepass
+# crudini --set /etc/trove/trove.conf keystone_authtoken auth_host $keystonehost
+# crudini --set /etc/trove/trove.conf keystone_authtoken auth_port 35357
+# crudini --set /etc/trove/trove.conf keystone_authtoken auth_protocol http
 crudini --set /etc/trove/trove.conf keystone_authtoken signing_dir /var/cache/trove
 crudini --set /etc/trove/trove.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/trove/trove.conf keystone_authtoken auth_url http://$keystonehost:35357
