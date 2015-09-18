@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.5.el7 "Leopardus Pardalis"
-# August 22, 2015
+# Version: 1.0.6.el7 "Leopardus Pardalis"
+# September 18, 2015
 #
 
 #
@@ -282,6 +282,29 @@ extracinderhosts=""
 # The next variable controls if you want to clean-up all lv's at uninstall time.
 # the default is "yes", meaning, all lv's in the cinder-volumes vg will be erased.
 cindercleanatuninstall="yes"
+#
+# If you want to include glusterfs backend, change the following variable to "yes"
+#
+cinderconfigglusterfs="no"
+#
+# Also, change the gluster resource for openstack. Tipically, an IP or FQND followed
+# by ":/" and the resource name:
+glusterfsresource="192.168.1.1:/openstack"
+#
+# If you want to include nfs backend, change the following variable to "yes"
+#
+cinderconfignfs="no"
+#
+# Also, change the nfs resource for openstack. Tipically, an IP or FQDN followed by 
+# ":" and the resource path
+#
+nfsresource="192.168.1.1:/data/openstack-nfs"
+#
+# Also, change the nfs mount options. The following should suit most configurations
+# but again, change it and adapt it to your NFS environment
+#
+nfs_mount_options="rw,hard,intr,timeo=90,bg,vers=3,proto=tcp,rsize=32768,wsize=32768"
+#
 
 
 

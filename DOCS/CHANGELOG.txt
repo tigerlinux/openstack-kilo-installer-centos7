@@ -1,3 +1,15 @@
+1.0.6.el7 - September 18, 2015
+
+- New feature: Multiple cinder backends. From this version, we can configure
+  nfs and gluster along lvm. You can choose any combination of currently
+  supported cinder backends (supported by this installer), or none.
+- Some configuration items deprecated for heat and ceilometer.
+- Added crontab for mongo database expiration.
+- ML2-Ovs port-security enabled on ML2 config.
+- Included new script for hypervisor and associated instances listing.
+- Added extra-failsafe on neutron install module in order to make us more
+  resistant to package changes or updates which can render ml2 useless.
+
 1.0.5.el7 - August 22, 2015
 
 - Bugfix: Incorrect crudini TAG's fixed for LBaaS service in neutron module.

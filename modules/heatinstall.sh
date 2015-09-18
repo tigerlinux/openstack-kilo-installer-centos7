@@ -125,9 +125,10 @@ crudini --set /etc/heat/heat.conf heat_api_cloudwatch bind_port 8003
 crudini --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
 crudini --set /etc/heat/heat.conf keystone_authtoken admin_user $heatuser
 crudini --set /etc/heat/heat.conf keystone_authtoken admin_password $heatpass
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_host $keystonehost
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_port 35357
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_protocol http
+# Deprecated !
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_host $keystonehost
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_port 35357
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_protocol http
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_uri http://$keystonehost:5000/v2.0/
 crudini --set /etc/heat/heat.conf keystone_authtoken identity_uri http://$keystonehost:35357
 crudini --set /etc/heat/heat.conf keystone_authtoken signing_dir /tmp/keystone-signing-heat

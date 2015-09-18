@@ -212,17 +212,27 @@ The script uses the following options:
 
 NOTE: We used or best judgment to ensure the proper start/stop order in the openstack-control.sh script. That being said, you could benefit a lot by using this script to control you cloud instead of the order normally set by “init”, “systemctl” or “upstart”. A good choice can be to place the script inside rc.local file. Your choice.
 
-The installer will place a script “openstack-log-cleaner.sh” in the path “/usr/local/bin” that have the ability to “clean” all OpenStack related logs.
-
-This script is called during the final phase of installation to clean all logs before leaving the server installed and running for the very first time, but can also be used by you “Cloud Administrator” to clean all OpenStack related logs whenever you consider it necessary.
-
 **IMPORTANT NOTE**: Again, We recommend using the openstack-control.sh script to initialize all OpenStack services!. Put all openstack services in "disable" state with "openstack-control.sh disable" and call the script with the "start" option from inside the /etc/rc.local file:
 
 ```bash
 /usr/local/bin/openstack-control.sh start
 ```
 
-This script must be included in every single OpenStack node (controller and compute nodes)
+This script is included by the installer in every single OpenStack node (controller and compute nodes)
+
+```bash
+openstack-log-cleaner.sh
+```
+
+The installer will place a script “openstack-log-cleaner.sh” in the path “/usr/local/bin” that have the ability to “clean” all OpenStack related logs.
+
+This script is called during the final phase of installation to clean all logs before leaving the server installed and running for the very first time, but can also be used by you “Cloud Administrator” to clean all OpenStack related logs whenever you consider it necessary.
+
+```bash
+compute-and-instances-full-report.sh
+```
+
+This script is also copied by the installer onto /usr/local/bin directory. The function of this script is give a report of all compute nodes in the openstack cloud and it's related virtual machines (instances) including the IP or IP's assigned to the instances.
 
 
 ### Keystone Environment Admin Variables

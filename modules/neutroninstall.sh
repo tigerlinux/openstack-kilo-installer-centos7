@@ -112,6 +112,12 @@ ln -f -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 
 sed -i 's,plugins/openvswitch/ovs_neutron_plugin.ini,plugin.ini,g' /usr/lib/systemd/system/neutron-openvswitch-agent.service
 
+# NOTE: Also, it can happen that after an yum update the file gets overwritten inducing the same bug. The following step
+# is a FAILSAFE (sigh...) applied in order to ensure the right configuration will be used for ml2
+
+mv /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini.ORG
+ln -f -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
+
 #
 # Part of the same patch !.
 #
@@ -419,6 +425,9 @@ crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling False
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs network_vlan_ranges $network_vlan_ranges
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs local_ip $neutron_computehost
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs bridge_mappings $bridge_mappings
+
+# Added 17-Sept-2015 - ML2 Port Security
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers port_security
 
 #
 # Database Flavor in ML2 Plugin configured according to selected flavor in main config

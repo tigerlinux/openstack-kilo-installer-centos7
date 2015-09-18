@@ -63,6 +63,7 @@ fi
 cp -v ./libs/openstack-control.sh /usr/local/bin/
 cp -v ./libs/openstack-log-cleaner.sh /usr/local/bin/
 cp -v ./libs/openstack-vm-boot-start.sh /usr/local/bin/
+cp -v ./libs/compute-and-instances-full-report.sh /usr/local/bin/
 if [ $keystoneinstall == "yes" ]
 then
 	cp -v ./libs/openstack-keystone-tokenflush.sh /usr/local/bin/
@@ -72,6 +73,7 @@ cp -v ./libs/nova-start-vms.conf /etc/openstack-control-script-config/
 
 chmod 755 /usr/local/bin/openstack-control.sh
 chmod 755 /usr/local/bin/openstack-log-cleaner.sh
+chmod 755 /usr/local/bin/compute-and-instances-full-report.sh
 if [ $keystoneinstall == "yes" ]
 then
 	chmod 755 /usr/local/bin/openstack-keystone-tokenflush.sh
