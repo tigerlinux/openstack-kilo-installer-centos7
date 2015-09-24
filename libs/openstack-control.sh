@@ -23,57 +23,50 @@ then
 	consolesvc=`/bin/cat /etc/openstack-control-script-config/nova-console-svc`
 fi
 
-#
-# From KILO, Keystone uses mod_wsgi trough apache for it's services, but we can't
-# make it work yet !!
-#
-keystone_svc_start='httpd'
-#
-# keystone_svc_start='openstack-keystone'
+# Keystone. Index=0
+svckeystone=(
+"
+httpd
+"
+)
 
-swift_svc_start='
-	openstack-swift-account
-	openstack-swift-account-auditor
-	openstack-swift-account-reaper
-	openstack-swift-account-replicator
-	openstack-swift-container
-	openstack-swift-container-auditor
-	openstack-swift-container-replicator
-	openstack-swift-container-updater
-	openstack-swift-object
-	openstack-swift-object-auditor
-	openstack-swift-object-replicator
-	openstack-swift-object-updater
-	openstack-swift-proxy
-'
+# Swift. Index=1
+svcswift=(
+"
+openstack-swift-account
+openstack-swift-account-auditor
+openstack-swift-account-reaper
+openstack-swift-account-replicator
+openstack-swift-container
+openstack-swift-container-auditor
+openstack-swift-container-replicator
+openstack-swift-container-updater
+openstack-swift-object
+openstack-swift-object-auditor
+openstack-swift-object-replicator
+openstack-swift-object-updater
+openstack-swift-proxy
+"
+)
 
-glance_svc_start='
-	openstack-glance-registry
-	openstack-glance-api
-'
+# Glance. Index=2
+svcglance=(
+"
+openstack-glance-registry
+openstack-glance-api
+"
+)
 
-cinder_svc_start='
-	openstack-cinder-api
-	openstack-cinder-scheduler
-	openstack-cinder-volume
-'
+# Cinder. Index=3
+svccinder=(
+"
+openstack-cinder-api
+openstack-cinder-scheduler
+openstack-cinder-volume
+"
+)
 
-heat_svc_start='
-	openstack-heat-api
-	openstack-heat-api-cfn
-	openstack-heat-engine
-'
-
-trove_svc_start='
-	openstack-trove-api
-	openstack-trove-taskmanager
-	openstack-trove-conductor
-'
-
-sahara_svc_start='
-	openstack-sahara-all
-'
-
+# Neutron. Index=4
 if [ -f /etc/openstack-control-script-config/neutron-full-installed ]
 then
 	if [ -f /etc/openstack-control-script-config/neutron-full-installed-metering ]
@@ -84,7 +77,8 @@ then
 	fi
 	if [ -f /etc/openstack-control-script-config/neutron-full-installed-vpnaas ]
 	then
-		neutron_svc_start="
+		svcneutron=(
+			"
 			neutron-ovs-cleanup
 			neutron-openvswitch-agent
 			neutron-metadata-agent
@@ -94,9 +88,11 @@ then
 			neutron-vpn-agent
 			$metering
 			neutron-server
-		"
+			"
+		)
 	else
-		neutron_svc_start="
+		svcneutron=(
+			"
                         neutron-ovs-cleanup
                         neutron-openvswitch-agent
                         neutron-metadata-agent
@@ -105,29 +101,38 @@ then
                         neutron-lbaas-agent
 			$metering
                         neutron-server
-		"
+			"
+		)
 	fi
 else
-	neutron_svc_start='
+	svcneutron=(
+		"
 		neutron-ovs-cleanup
 		neutron-openvswitch-agent
-	'
+		neutron-l3-agent
+		neutron-metadata-agent
+		"
+	)
 fi
 
+# Nova. Index=5
 if [ -f /etc/openstack-control-script-config/nova-full-installed ]
 then
 	if [ -f /etc/openstack-control-script-config/nova-without-compute ]
 	then
-		nova_svc_start="
+		svcnova=(
+			"
 			openstack-nova-api
 			openstack-nova-cert
 			openstack-nova-scheduler
 			openstack-nova-conductor
 			openstack-nova-consoleauth
 			$consolesvc
-		"
+			"
+		)
 	else
-		nova_svc_start="
+		svcnova=(
+			"
 			openstack-nova-api
 			openstack-nova-cert
 			openstack-nova-scheduler
@@ -135,14 +140,18 @@ then
 			openstack-nova-consoleauth
 			$consolesvc
 			openstack-nova-compute
-		"
+			"
+		)
 	fi
 else
-	nova_svc_start='
+	svcnova=(
+		"
 		openstack-nova-compute
-	'
+		"
+	)
 fi
 
+# Ceilometer. Index=6
 if [ -f /etc/openstack-control-script-config/ceilometer-installed-alarms ]
 then
 	alarm1="openstack-ceilometer-alarm-notifier"
@@ -156,16 +165,19 @@ if [ -f /etc/openstack-control-script-config/ceilometer-full-installed ]
 then
 	if [ -f /etc/openstack-control-script-config/ceilometer-without-compute ]
 	then
-		ceilometer_svc_start="
+		svcceilometer=(
+			"
 			openstack-ceilometer-central
 			openstack-ceilometer-api
 			openstack-ceilometer-collector
 			openstack-ceilometer-notification
 			$alarm1
 			$alarm2
-		"
+			"
+		)
 	else
-		ceilometer_svc_start="
+		svcceilometer=(
+			"
 			openstack-ceilometer-compute
 			openstack-ceilometer-central
 			openstack-ceilometer-api
@@ -173,714 +185,300 @@ then
 			openstack-ceilometer-notification
 			$alarm1
 			$alarm2
-		"
+			"
+		)
 	fi
 else
-	ceilometer_svc_start="
+	svcceilometer=(
+		"
 		openstack-ceilometer-compute
-	"
+		"
+	)
 fi
 
+# Heat. Index=7
+svcheat=(
+"
+openstack-heat-api
+openstack-heat-api-cfn
+openstack-heat-engine
+"
+)
 
+# Trove. Index=8
+svctrove=(
+"
+openstack-trove-api
+openstack-trove-taskmanager
+openstack-trove-conductor
+"
+)
 
-service_status_stop=`echo $service_status_start_enable_disable|tac -s' '`
+# Sahara. Index=9
+svcsahara=(
+"
+openstack-sahara-all
+"
+)
 
-keystone_svc_stop='httpd'
-swift_svc_stop=`echo $swift_svc_start|tac -s' '`
-glance_svc_stop=`echo $glance_svc_start|tac -s' '`
-cinder_svc_stop=`echo $cinder_svc_start|tac -s' '`
-neutron_svc_stop=`echo $neutron_svc_start|tac -s' '`
-nova_svc_stop=`echo $nova_svc_start|tac -s' '`
-ceilometer_svc_stop=`echo $ceilometer_svc_start|tac -s' '`
-heat_svc_stop=`echo $heat_svc_start|tac -s' '`
-trove_svc_stop=`echo $trove_svc_start|tac -s' '`
-sahara_svc_stop=`echo $sahara_svc_start|tac -s' '`
+#
+# Our Service Indexes:
+#
+# Keystone = 0
+# Swift = 1
+# Glance = 2
+# Cinder = 3
+# Neutron = 4
+# Nova = 5
+# Ceilometer = 6
+# Heat = 7
+# Trove = 8
+# Sahara = 9
+#
 
+# Now, we create a super array with all services:
 
+servicesstart=("${svckeystone[@]}")				# Index 0 - Keystone
+servicesstart=("${servicesstart[@]}" "${svcswift[@]}")		# Index 1 - Swift
+servicesstart=("${servicesstart[@]}" "${svcglance[@]}")		# Index 2 - Glance
+servicesstart=("${servicesstart[@]}" "${svccinder[@]}")		# Index 3 - Cinder
+servicesstart=("${servicesstart[@]}" "${svcneutron[@]}")	# Index 4 - Neutron
+servicesstart=("${servicesstart[@]}" "${svcnova[@]}")		# Index 5 - Nova
+servicesstart=("${servicesstart[@]}" "${svcceilometer[@]}")	# Index 6 - Ceilometer
+servicesstart=("${servicesstart[@]}" "${svcheat[@]}")		# Index 7 - Heat
+servicesstart=("${servicesstart[@]}" "${svctrove[@]}")		# Index 8 - Trove
+servicesstart=("${servicesstart[@]}" "${svcsahara[@]}")		# Index 9 - Sahara
+
+moduleliststart=""
+moduleliststop=""
+
+# Index 0 - Keystone
+if [ -f /etc/openstack-control-script-config/keystone ]
+then
+	moduleliststart="$moduleliststart 0"
+fi
+
+# Index 1 - Swift
+if [ -f /etc/openstack-control-script-config/swift ]
+then
+	moduleliststart="$moduleliststart 1"
+fi
+
+# Index 2 - Glance
+if [ -f /etc/openstack-control-script-config/glance ]
+then
+	moduleliststart="$moduleliststart 2"
+fi
+
+# Index 3 - Cinder
+if [ -f /etc/openstack-control-script-config/cinder ]
+then
+	moduleliststart="$moduleliststart 3"
+fi
+
+# Index 4 - Neutron
+if [ -f /etc/openstack-control-script-config/neutron ]
+then
+	moduleliststart="$moduleliststart 4"
+fi
+
+# Index 5 - Nova
+if [ -f /etc/openstack-control-script-config/nova ]
+then
+	moduleliststart="$moduleliststart 5"
+fi
+
+# Index 6 - Ceilometer
+if [ -f /etc/openstack-control-script-config/ceilometer ]
+then
+	moduleliststart="$moduleliststart 6"
+fi
+
+# Index 7 - Heat
+if [ -f /etc/openstack-control-script-config/heat ]
+then
+	moduleliststart="$moduleliststart 7"
+fi
+
+# Index 8 - Trove
+if [ -f /etc/openstack-control-script-config/trove ]
+then
+	moduleliststart="$moduleliststart 8"
+fi
+
+# Index 9 - Sahara
+if [ -f /etc/openstack-control-script-config/sahara ]
+then
+	moduleliststart="$moduleliststart 9"
+fi
+
+#
+# Now, if we used $2 (second paramater - optional) we can change the index to the
+# one of the specific service we want to start/stop/restart/status/etc.
+#
+case $2 in
+keystone)
+	# Index 0
+	if [ -f /etc/openstack-control-script-config/keystone ]
+	then
+		moduleliststart="0"
+	fi
+	;;
+swift)
+	# Index 1
+	if [ -f /etc/openstack-control-script-config/swift ]
+	then
+		moduleliststart="1"
+	fi
+	;;
+glance)
+	# Index 2
+	if [ -f /etc/openstack-control-script-config/glance ]
+	then
+		moduleliststart="2"
+	fi
+	;;
+cinder)
+	# Index 3
+	if [ -f /etc/openstack-control-script-config/cinder ]
+	then
+		moduleliststart="3"
+	fi
+	;;
+neutron)
+	# Index 4
+	if [ -f /etc/openstack-control-script-config/neutron ]
+	then
+		moduleliststart="4"
+	fi
+	;;
+nova)
+	# Index 5
+	if [ -f /etc/openstack-control-script-config/nova ]
+	then
+		moduleliststart="5"
+	fi
+	;;
+ceilometer)
+	# Index 6
+	if [ -f /etc/openstack-control-script-config/ceilometer ]
+	then
+		moduleliststart="6"
+	fi
+	;;
+heat)	
+	# Index 7
+	if [ -f /etc/openstack-control-script-config/heat ]
+	then
+		moduleliststart="7"
+	fi
+	;;
+trove)
+	# Index 8
+	if [ -f /etc/openstack-control-script-config/trove ]
+	then
+		moduleliststart="8"
+	fi
+	;;
+sahara)
+	# Index 9
+	if [ -f /etc/openstack-control-script-config/sahara ]
+	then
+		moduleliststart="9"
+	fi
+	;;
+esac
+
+moduleliststop=`echo $moduleliststart|tac -s' '`
+
+for svc in $moduleliststop
+do
+	servicesstop[$svc]=`echo ${servicesstart[$svc]}|tac -s' '`
+done
+
+#
+# At this point, we have all our services lists. Now, we define 
+# start/stop/status/enable/disable functions
+#
+
+startsvc(){
+	for module in $moduleliststart
+	do
+		for i in ${servicesstart[$module]}
+		do
+			systemctl start $i
+		done
+	done
+}
+
+stopsvc(){
+        for module in $moduleliststop
+        do
+                for i in ${servicesstop[$module]}
+                do
+                        systemctl stop $i
+                done
+        done	
+}
+
+enablesvc(){
+	for module in $moduleliststart
+	do
+		for i in ${servicesstart[$module]}
+		do
+			echo "Enabling Service: $i"
+			systemctl enable $i
+		done
+	done
+}
+
+disablesvc(){
+	for module in $moduleliststart
+	do
+		for i in ${servicesstart[$module]}
+		do
+			echo "Disabling Service: $i"
+			systemctl disable $i
+		done
+	done
+}
+
+statussvc(){
+	for module in $moduleliststart
+	do
+		for i in ${servicesstart[$module]}
+		do
+			systemctl status $i
+		done
+	done
+}
+
+#
+# Finally, our main case
+#
 case $1 in
-
 start)
-
-	echo ""
-	echo "Starting OpenStack Services"
-	echo ""
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_start
-                do
-                        service $i start
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_start
-                do
-                        service $i start
-                        #sleep 1
-                done
-        fi
-
-	echo ""
-
+	startsvc
 	;;
-
 stop)
-
-	echo ""
-	echo "Stopping OpenStack Services"
-	echo ""
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_stop
-                do
-                        service $i stop
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_stop
-                do
-                        service $i stop
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	rm -rf /tmp/keystone-signing-*
-	rm -rf /tmp/cd_gen_*
-	if [ -d /var/cache/trove ]
-	then
-		rm -f /var/cache/trove/*
-	fi
-
-	echo ""
-
+	stopsvc
 	;;
-
-status)
-
-	echo ""
-	echo "Verifying OpenStack Services Status"
-	echo ""
-
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_start
-                do
-                        service $i status -n 0
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_start
-		do
-			service $i status -n 0
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_start
-                do
-                        service $i status -n 0
-                done
-        fi
-
-	echo ""
-	;;
-
-enable)
-
-	echo ""
-	echo "Enabling OpenStack Services"
-	echo ""
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_start
-                do
-                        chkconfig $i on
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_start
-		do
-			chkconfig $i on
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_start
-                do
-                        chkconfig $i on
-                done
-        fi
-
-	echo ""
-	;;
-
-disable)
-
-	echo ""
-        echo "Disabling OpenStack Services"
-        echo ""
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_start
-                do
-                        chkconfig $i off
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_start
-		do
-			chkconfig $i off
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_start
-                do
-                        chkconfig $i off
-                done
-        fi
-
-        echo ""
-	;;
-
 restart)
-
-	echo ""
-	echo "Re-Starting OpenStack Services"
-	echo ""
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_stop
-                do
-                        service $i stop
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_stop
-                do
-                        service $i stop
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_stop
-		do
-			service $i stop
-			#sleep 1
-		done
-	fi
-
-	rm -rf /tmp/keystone-signing-*
-	rm -rf /tmp/cd_gen_*
-        if [ -d /var/cache/trove ]
-        then
-                rm -f /var/cache/trove/*
-        fi
-
-	if [ -f /etc/openstack-control-script-config/keystone ]
-	then
-		for i in $keystone_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/swift ]
-	then
-		for i in $swift_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/glance ]
-	then
-		for i in $glance_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/cinder ]
-	then
-		for i in $cinder_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/neutron ]
-	then
-		for i in $neutron_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-                if [ -f /etc/openstack-control-script-config/neutron-full-installed ]
-                then
-                        sleep 5
-                        service neutron-l3-agent restart
-                        service neutron-dhcp-agent restart
-                fi
-	fi
-
-	if [ -f /etc/openstack-control-script-config/nova ]
-	then
-		for i in $nova_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-	if [ -f /etc/openstack-control-script-config/ceilometer ]
-	then
-		for i in $ceilometer_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/heat ]
-        then
-                for i in $heat_svc_start
-                do
-                        service $i start
-                        #sleep 1
-                done
-        fi
-
-	if [ -f /etc/openstack-control-script-config/trove ]
-	then
-		for i in $trove_svc_start
-		do
-			service $i start
-			#sleep 1
-		done
-	fi
-
-        if [ -f /etc/openstack-control-script-config/sahara ]
-        then
-                for i in $sahara_svc_start
-                do
-                        service $i start
-                        #sleep 1
-                done
-        fi
-
-	echo ""
-
+	stopsvc
+	startsvc
 	;;
-
+enable)
+	enablesvc
+	;;
+disable)
+	disablesvc
+	;;
+status)
+	statussvc
+	;;
 *)
 	echo ""
-	echo "Usage: $0 start, stop, status, restart, enable, o disable:"
+	echo "Usage: $0 start, stop, status, restart, enable, or disable:"
 	echo "start:    Starts all OpenStack Services"
 	echo "stop:     Stops All OpenStack Services"
 	echo "restart:  Re-Starts all OpenStack Services"
@@ -889,5 +487,4 @@ restart)
 	echo "status:   Show the status of all OpenStack Services"
 	echo ""
 	;;
-
 esac

@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Installer Script
-# Version: 1.0.6.el7 "Leopardus Pardalis"
-# September 18, 2015
+# Version: 1.0.7.el7 "Leopardus Pardalis"
+# September 23, 2015
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -72,7 +72,7 @@ case $1 in
 	echo "Flavor: OpenStack KILO for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.0.6.el7 \"Leopardus Pardalis\" - September 18, 2015"
+	echo "Version 1.0.7.el7 \"Leopardus Pardalis\" - September 23, 2015"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"

@@ -220,6 +220,39 @@ NOTE: We used or best judgment to ensure the proper start/stop order in the open
 
 This script is included by the installer in every single OpenStack node (controller and compute nodes)
 
+You can also control individual OpenStack modules with the script:
+
+```bash
+/usr/local/bin/openstack-control.sh OPTION MODULE
+```
+
+Samples:
+
+```bash
+/usr/local/bin/openstack-control.sh start nova
+```
+
+```bash
+/usr/local/bin/openstack-control.sh restart neutron
+```
+
+```bash
+/usr/local/bin/openstack-control.sh status cinder
+```
+
+By the moment, we support the following modules:
+- keystone
+- swift
+- glance
+- cinder
+- neutron
+- nova
+- ceilometer
+- heat
+- sahara
+
+
+
 ```bash
 openstack-log-cleaner.sh
 ```

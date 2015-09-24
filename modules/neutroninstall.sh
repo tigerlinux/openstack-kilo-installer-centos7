@@ -203,12 +203,15 @@ crudini --set /etc/neutron/neutron.conf DEFAULT base_mac "$basemacspec"
 crudini --set /etc/neutron/neutron.conf DEFAULT mac_generation_retries 16
 crudini --set /etc/neutron/neutron.conf DEFAULT dhcp_lease_duration $dhcp_lease_duration
 crudini --set /etc/neutron/neutron.conf DEFAULT allow_bulk True
-crudini --set /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips False
+# crudini --set /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips False
+crudini --set /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips True
 crudini --set /etc/neutron/neutron.conf DEFAULT control_exchange neutron
 crudini --set /etc/neutron/neutron.conf DEFAULT default_notification_level INFO
 crudini --set /etc/neutron/neutron.conf DEFAULT notification_topics notifications
 crudini --set /etc/neutron/neutron.conf DEFAULT state_path /var/lib/neutron
 crudini --set /etc/neutron/neutron.conf DEFAULT lock_path /var/lib/neutron/lock
+crudini --set /etc/neutron/neutron.conf DEFAULT router_distributed True
+crudini --set /etc/neutron/neutron.conf DEFAULT allow_automatic_l3agent_failover True
 
 mkdir -p /var/lib/neutron/lock
 chown neutron.neutron /var/lib/neutron/lock
@@ -587,7 +590,14 @@ echo ""
 #
 
 su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-  --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade kilo" neutron
+	--config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade kilo" neutron
+
+#
+# Fix for BUG: https://bugs.launchpad.net/neutron/+bug/1463830
+#
+su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+        --config-file /etc/neutron/plugin.ini --service fwaas upgrade 540142f314f4" neutron
+
 
 sync
 sleep 2
@@ -613,14 +623,14 @@ then
 	service neutron-dhcp-agent stop
 	chkconfig neutron-dhcp-agent off
 
-	service neutron-l3-agent stop
-	chkconfig neutron-l3-agent off
+	service neutron-l3-agent start
+	chkconfig neutron-l3-agent on
 
 	service neutron-lbaas-agent stop
 	chkconfig neutron-lbaas-agent off
 
-	service neutron-metadata-agent stop
-	chkconfig neutron-metadata-agent off
+	service neutron-metadata-agent start
+	chkconfig neutron-metadata-agent on
 
 	if [ $vpnaasinstall == "yes" ]
 	then

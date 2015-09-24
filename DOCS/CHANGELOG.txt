@@ -1,3 +1,14 @@
+1.0.7.el7 - September 23, 2015
+
+- New version of "openstack-control.sh"
+  control script with new features.
+- L3/Metadata services included for
+  compute nodes.
+- Extra config tokens for neutron in
+  order to allow gre/vlanx and dvr.
+- Database fix for FWaaS in Neutron.
+- Overlapping IP's set to True.
+
 1.0.6.el7 - September 18, 2015
 
 - New feature: Multiple cinder backends. From this version, we can configure
