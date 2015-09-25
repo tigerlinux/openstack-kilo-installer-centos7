@@ -406,6 +406,7 @@ startsvc(){
 	do
 		for i in ${servicesstart[$module]}
 		do
+			echo "Starting Service: $i"
 			systemctl start $i
 		done
 	done
@@ -416,6 +417,7 @@ stopsvc(){
         do
                 for i in ${servicesstop[$module]}
                 do
+			echo "Stopping Service: $i"
                         systemctl stop $i
                 done
         done	

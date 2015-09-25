@@ -1,3 +1,10 @@
+1.0.8.el7 - September 24, 2015
+
+- More improvements for openstack-control.sh
+  service control script.
+- Bugs corrected in nova and neutron install
+  modules related to metadata service.
+
 1.0.7.el7 - September 23, 2015
 
 - New version of "openstack-control.sh"

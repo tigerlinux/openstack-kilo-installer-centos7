@@ -254,7 +254,7 @@ crudini --set /etc/nova/nova.conf neutron admin_auth_url "http://$keystonehost:3
 # Deprecated
 # crudini --set /etc/nova/nova.conf DEFAULT enabled_apis "ec2,osapi_compute,metadata"
 crudini --set /etc/nova/nova.conf neutron admin_username $neutronuser
-crudini --set /etc/nova/nova.conf service neutron_metadata_proxy True
+crudini --set /etc/nova/nova.conf neutron service_metadata_proxy True
 crudini --set /etc/nova/nova.conf DEFAULT volume_api_class nova.volume.cinder.API
 crudini --set /etc/nova/nova.conf neutron url "http://$neutronhost:9696"
 crudini --set /etc/nova/nova.conf libvirt virt_type kvm
