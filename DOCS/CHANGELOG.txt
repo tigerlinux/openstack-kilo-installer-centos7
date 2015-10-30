@@ -1,3 +1,23 @@
+1.0.9.el7 - October 30, 2015
+
+- Minor tweaks for openstack-control.sh.
+- Minor fixes for horizon install module.
+- Minor fixes for heat install module.
+- Extra config options included in nova
+  install module in order to allow block
+  live migration.
+- "log_dir" entry corrected for cinder,
+  nova and ceilometer modules.
+- Fixes and tweaks for "dvr" in Neutron.
+- Some "typos" corrected in "vlan net"
+  documentation (DOCS directory).
+- More clean-up secuences added in
+  uninstall module.
+- Added extra configurations items for
+  neutron in order to include gre, vlan
+  and vxlan networks.
+- Fixed compute-and-instances scripts.
+
 1.0.8.el7 - September 24, 2015
 
 - More improvements for openstack-control.sh

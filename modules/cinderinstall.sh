@@ -136,7 +136,7 @@ case $brokerflavor in
 	;;
 esac
 
-crudini --set /etc/cinder/cinder.conf DEFAULT logdir /var/log/cinder
+crudini --set /etc/cinder/cinder.conf DEFAULT log_dir /var/log/cinder
 crudini --set /etc/cinder/cinder.conf DEFAULT state_path /var/lib/cinder
 crudini --set /etc/cinder/cinder.conf DEFAULT volumes_dir /var/lib/cinder/volumes/
 crudini --set /etc/cinder/cinder.conf DEFAULT rootwrap_config /etc/cinder/rootwrap.conf

@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.8.el7 "Leopardus Pardalis"
-# September 24, 2015
+# Version: 1.0.9.el7 "Leopardus Pardalis"
+# October 30, 2015
 #
 
 #
@@ -146,6 +146,7 @@ keystoneadminpass="P@ssw0rd"
 keystoneadmintenant="admin"
 keystoneservicestenant="services"
 keystonememberrole="_member_"
+keystoneuserrole="user"
 keystonereselleradminrole="ResellerAdmin"
 keystone_admin_rc_file="/root/keystonerc_admin"
 keystone_fulladmin_rc_file="/root/keystonerc_fulladmin"
@@ -356,6 +357,19 @@ metadata_shared_secret="P@ssw0rd"
 basemacspec="fa:16:3e:00:00:00"
 # Lease duration in seconds
 dhcp_lease_duration="7200"
+#
+# If you change the following variable to "yes", we'll include a DNSMASQ rule
+# that will try to force a MTU of 1454 bytes trough dhcp option 26. This is only
+# needed if you are going to use GRE. If you are using vlan of flat networks, let
+# the option in "no"
+forcegremtu="no"
+#
+# If you are going to use gre or vxlan, change the following variables according
+# to your preferences
+tunnel_id_ranges="1:100"
+vni_ranges="110:1000"
+#
+#
 # Only if you are using MySQL as DB backend. If for any chance, you have multiple
 # neutron hosts, put here the IP address of the extra hosts, space separated.
 # Normally, this is not necessary unless your mysql service access policies are very

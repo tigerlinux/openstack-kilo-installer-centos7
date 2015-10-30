@@ -1,4 +1,3 @@
 Pendings:
 
-- Include more cinder backends (NFS/GLUSTER)
 - Evaluate the inclusion of: designate, manila and ironic

@@ -180,7 +180,7 @@ fi
 
 crudini --set /etc/nova/nova.conf DEFAULT use_forwarded_for False
 crudini --set /etc/nova/nova.conf DEFAULT instance_usage_audit_period hour
-crudini --set /etc/nova/nova.conf DEFAULT logdir /var/log/nova
+crudini --set /etc/nova/nova.conf DEFAULT log_dir /var/log/nova
 crudini --set /etc/nova/nova.conf DEFAULT state_path /var/lib/nova
 crudini --set /etc/nova/nova.conf DEFAULT volumes_dir /etc/nova/volumes
 crudini --set /etc/nova/nova.conf DEFAULT dhcpbridge /usr/bin/nova-dhcpbridge
@@ -356,6 +356,11 @@ case $brokerflavor in
 	crudini --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_ha_queues false
 	;;
 esac
+
+
+# New for block live migration
+crudini --set /etc/nova/nova.conf libvirt live_migration_flag "VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_TUNNELLED"
+crudini --set /etc/nova/nova.conf DEFAULT config_drive_format vfat
 
 sync
 sleep 5

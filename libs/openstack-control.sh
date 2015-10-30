@@ -450,7 +450,7 @@ statussvc(){
 	do
 		for i in ${servicesstart[$module]}
 		do
-			systemctl status $i
+			systemctl -n 0 status $i
 		done
 	done
 }

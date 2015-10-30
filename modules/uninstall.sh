@@ -167,8 +167,18 @@ rm -fr /etc/glance \
 	/var/lib/qpidd \
 	/etc/qpid \
 	/var/oslock/cinder \
-	/var/oslock/nova
+	/var/oslock/nova \
+	/root/keystonerc_fulladmin
 
+rm -fr /var/log/{keystone,glance,nova,neutron,cinder,ceilometer,heat,sahara,trove}*
+rm -fr /run/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara}*
+rm -fr /run/lock/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara}*
+rm -fr /root/.{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara}client
+
+rm -f /etc/cron.d/openstack-monitor-crontab
+rm -f /etc/cron.d/ceilometer-expirer-crontab
+rm -f /var/log/openstack-install.log
+rm -fr /var/lib/openstack-dashboard
 
 service crond restart
 

@@ -286,6 +286,10 @@ openstack project create --description "Service Project" $keystoneservicestenant
 echo "Creating Member Role: $keystonememberrole"
 openstack role create $keystonememberrole
 
+# User role
+echo "Creating User Role: $keystoneuserrole"
+openstack role create $keystoneuserrole
+
 echo "Adding Member Role $keystonememberrole to Admin User: $keystoneadminuser"
 openstack role add --project $keystoneadminuser --user $keystoneadminuser $keystonememberrole
 

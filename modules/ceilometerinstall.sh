@@ -168,7 +168,7 @@ crudini --set /etc/ceilometer/ceilometer.conf service_credentials os_endpoint_ty
 
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT metering_api_port 8777
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT auth_strategy keystone
-crudini --set /etc/ceilometer/ceilometer.conf DEFAULT logdir /var/log/ceilometer
+crudini --set /etc/ceilometer/ceilometer.conf DEFAULT log_dir /var/log/ceilometer
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT os_auth_region $endpointsregion
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT host `hostname`
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT pipeline_cfg_file pipeline.yaml
@@ -200,7 +200,6 @@ crudini --set /etc/ceilometer/ceilometer.conf DEFAULT verbose false
 crudini --set /etc/ceilometer/ceilometer.conf database connection "mongodb://$mondbuser:$mondbpass@$mondbhost:$mondbport/$mondbname"
 crudini --set /etc/ceilometer/ceilometer.conf database metering_time_to_live $mongodbttl
 crudini --set /etc/ceilometer/ceilometer.conf database time_to_live $mongodbttl
-crudini --set /etc/ceilometer/ceilometer.conf DEFAULT log_dir /var/log/ceilometer
 # Deprecated
 # crudini --set /etc/ceilometer/ceilometer.conf rpc_notifier2 topics notifications,glance_notifications
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT notification_topics notifications,glance_notifications

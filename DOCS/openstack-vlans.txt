@@ -25,7 +25,7 @@ This last step efectivelly makes the "bridge" between the vlan-tagged packets an
 
 So in general terms:
 
-ovs-vsctl add-port br-eth1 eth1-VLAN_ID tag=VLAN_ID -- set interfaces eth1-VLAN_ID type=internal
+ovs-vsctl add-port br-eth1 eth1-VLAN_ID tag=VLAN_ID -- set interface eth1-VLAN_ID type=internal
 
 3.- Server interfaces.
 
@@ -115,7 +115,7 @@ neutron net-create net-vlan-10 \
 --provider:network_type vlan \
 --provider:physical_network opennet \
 --provider:segmentation_id 10 \
---router:external=true
+--router:external
 
 the "segmentation_id" value must contain the VLAN tag (for our scenary, the value is 10)
 
@@ -153,7 +153,9 @@ neutron net-create NEW_NETWORK \
 --provider:network_type vlan \
 --provider:physical_network PHYSICAL_NETWORK_NAME \
 --provider:segmentation_id NEW_VLAN_ID \
---router:external=true
+--router:external
+
+(Note: Only the "Admin" tenant can use --router:external. Do not include this option if you are not the Admin tenant)
 
 
 Now our scenario with more networks:
@@ -194,25 +196,25 @@ neutron net-create net-vlan-10 \
 --shared --provider:network_type vlan \
 --provider:physical_network networkinteth2 \
 --provider:segmentation_id 10 \
---router:external=true
+--router:external
 
 neutron net-create net-vlan-20 \
 --shared --provider:network_type vlan \
 --provider:physical_network networkinteth2 \
 --provider:segmentation_id 20 \
---router:external=true
+--router:external
 
 neutron net-create net-vlan-30 \
 --shared --provider:network_type vlan \
 --provider:physical_network networkinteth1 \
 --provider:segmentation_id 30 \
---router:external=true
+--router:external
 
 neutron net-create net-vlan-50 \
 --shared --provider:network_type vlan \
 --provider:physical_network networkinteth1 \
 --provider:segmentation_id 50 \
---router:external=true
+--router:external
 
 Those commands create the vlan networks "net-vlan-10", "net-vlan-20", "net-vlan-30" and "net-vlan-50", and also the physical networks "networkineth1" and "networkineth2"
 

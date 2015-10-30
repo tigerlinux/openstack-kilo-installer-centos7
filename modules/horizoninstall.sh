@@ -150,7 +150,7 @@ then
 	esac
 
 	mkdir -p /var/lib/dash/.blackhole
-	/usr/share/openstack-dashboard/manage.py syncdb --noinput
+	/usr/share/openstack-dashboard/manage.py syncdb --noinput > /dev/null 2>&1
 	/usr/share/openstack-dashboard/manage.py createcachetable openstack_db_cache
 	/usr/share/openstack-dashboard/manage.py inspectdb
 else

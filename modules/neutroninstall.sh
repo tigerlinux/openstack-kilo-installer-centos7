@@ -156,6 +156,13 @@ then
 	echo "# expand-hosts"  >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
 	echo "# domain=dominio-interno-uno.home,192.168.1.0/24"  >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
 	echo "# domain=dominio-interno-dos.home,192.168.100.0/24"  >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
+	if [ $forcegremtu == "yes" ]
+	then
+		echo "dhcp-option-force=26,1454" >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
+	else
+		echo "# Uncomment the following option if you are using GRE" >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
+		echo "# dhcp-option-force=26,1454" >> /etc/dnsmasq-neutron.d/neutron-dnsmasq-extra.conf
+	fi
 	sync
 	sleep 5
 
@@ -174,6 +181,7 @@ echo "Applying IPTABLES Rules"
 iptables -A INPUT -p tcp -m multiport --dports 9696 -j ACCEPT
 iptables -A INPUT -p udp -m state --state NEW -m udp --dport 67 -j ACCEPT
 iptables -A INPUT -p udp -m state --state NEW -m udp --dport 68 -j ACCEPT
+iptables -A INPUT -p udp -m state --state NEW -m udp --dport 4789 -j ACCEPT
 iptables -t mangle -A POSTROUTING -p udp -m udp --dport 67 -j CHECKSUM --checksum-fill
 iptables -t mangle -A POSTROUTING -p udp -m udp --dport 68 -j CHECKSUM --checksum-fill
 service iptables save
@@ -210,7 +218,10 @@ crudini --set /etc/neutron/neutron.conf DEFAULT default_notification_level INFO
 crudini --set /etc/neutron/neutron.conf DEFAULT notification_topics notifications
 crudini --set /etc/neutron/neutron.conf DEFAULT state_path /var/lib/neutron
 crudini --set /etc/neutron/neutron.conf DEFAULT lock_path /var/lib/neutron/lock
-crudini --set /etc/neutron/neutron.conf DEFAULT router_distributed True
+if [ $neutron_in_compute_node == "no" ]
+then
+	crudini --set /etc/neutron/neutron.conf DEFAULT router_distributed True
+fi
 crudini --set /etc/neutron/neutron.conf DEFAULT allow_automatic_l3agent_failover True
 
 mkdir -p /var/lib/neutron/lock
@@ -369,6 +380,12 @@ crudini --set /etc/neutron/l3_agent.ini DEFAULT external_network_bridge ""
 crudini --set /etc/neutron/l3_agent.ini DEFAULT metadata_port 9697
 crudini --set /etc/neutron/l3_agent.ini DEFAULT enable_metadata_proxy True
 crudini --set /etc/neutron/l3_agent.ini DEFAULT router_delete_namespaces True
+if [ $neutron_in_compute_node == "yes" ]
+then
+	crudini --set /etc/neutron/l3_agent.ini DEFAULT agent_mode dvr
+else
+	crudini --set /etc/neutron/l3_agent.ini DEFAULT agent_mode dvr_snat
+fi
 
 sync
 sleep 2
@@ -420,15 +437,27 @@ crudini --set /etc/neutron/neutron.conf database idle_timeout 3600
 
 echo "#" >> /etc/neutron/plugins/ml2/ml2_conf.ini
 
-crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers "local,flat"
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers "local,flat,vlan,gre,vxlan"
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers "openvswitch,l2population"
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types "flat,vlan,gre,vxlan"
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_flat flat_networks "*"
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group True
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset True
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
-crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling False
+# crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling False
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling True
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs network_vlan_ranges $network_vlan_ranges
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs local_ip $neutron_computehost
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs bridge_mappings $bridge_mappings
+
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini agent arp_responder True
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini agent tunnel_types "gre,vxlan"
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini agent vxlan_udp_port "4789"
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini agent l2_population True
+
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vxlan_group "239.1.1.1"
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vni_ranges $vni_ranges
+crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_gre tunnel_id_ranges $tunnel_id_ranges
 
 # Added 17-Sept-2015 - ML2 Port Security
 crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers port_security

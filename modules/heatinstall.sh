@@ -180,7 +180,8 @@ source $keystone_admin_rc_file
 heat-keystone-setup-domain \
 	--stack-user-domain-name $stack_user_domain_name \
 	--stack-domain-admin $stack_domain_admin \
-	--stack-domain-admin-password $stack_domain_admin_password
+	--stack-domain-admin-password $stack_domain_admin_password \
+	> /dev/null 2>&1
 
 #
 # We proceed to provision/update HEAT Database

@@ -22,7 +22,8 @@ source $mykeystonefile
 # Next, we fill the "hypervisorlist" variable with all compute nodes in the cloud
 #
 
-hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'|cut -d. -f1`
+# hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'|cut -d. -f1`
+hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'`
 
 #
 # Then, we "loop" all the compute nodes and list it's configured instances
@@ -34,6 +35,6 @@ do
 	echo ""
 	echo "INSTANCES CONFIGURED AT COMPUTE NODE: $compute"
 	echo ""
-	nova list --host $compute
+	nova list --all-tenants --host $compute
 	echo ""
 done
