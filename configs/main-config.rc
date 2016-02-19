@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.9.el7 "Leopardus Pardalis"
-# October 30, 2015
+# Version: 1.0.10.el7 "Leopardus Pardalis"
+# February 18, 2016
 #
 
 #
@@ -580,6 +580,22 @@ troveuser="trove"
 trovesvce="trove"
 trovepass="P@ssw0rd"
 troveemail="trove@localhost"
+# If you want to use CINDER as Database storage backend, set the following variable to "yes".
+# if you let the variable as "no" (our default), trove will use locally base storage. This
+# mean you should use a flavor with ephemeral disk along root and swap disk. Trove configures
+# the database space in the extra disk (does not use the root disk for database storage):
+trovevolsupport="no"
+# Also, ensure the proper volume device (our default is vdb, considering a normal instance
+# with vda as primary disk, vdb as ephemeral disk and vdc as swap disk). If you are using
+# trove instances with local-based storage, the flavor must contain an ephemeral disk and
+# swap disk. In this case, trovevoldevice must be vdb. If you plan to use trove with cinder
+# based storage, the root disk will be vda, the swap disk will be vdb, and the cinder disk
+# will take vdc. In this case, trovevoldevice must be vdc and your flavor should not contain
+# an ephemeral disk. Just root and swap.
+trovevoldevice="vdb"
+# Trove default DataStore - Normally, mysql. Se trove documentation for other options, as trove
+# support many database engines:
+trovedefaultds="mysql"
 # Only if you are using MySQL as DB backend. If for any chance, you have multiple
 # trove hosts, put here the IP address of the extra hosts, space separated.
 # Normally, this is not necessary unless your mysql service access policies are very

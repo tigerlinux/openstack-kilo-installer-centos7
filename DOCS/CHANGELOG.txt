@@ -1,3 +1,13 @@
+1.0.10.el7 - February 18, 2016
+
+- Extensive rework of trove installation module. New
+  config options for trove in main config file, and
+  new procedure included to make a "sample" trove guest
+  agent config file in order to make easier for the
+  cloud admin to create the glance trove images.
+- Added more notes regarding trove in the main
+  Readme.
+
 1.0.9.el7 - October 30, 2015
 
 - Minor tweaks for openstack-control.sh.
