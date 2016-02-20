@@ -1,3 +1,8 @@
+1.0.11.el7 - February 20, 2016
+
+- Minor changes on trove install module and trove
+  notes on main readme.
+
 1.0.10.el7 - February 18, 2016
 
 - Extensive rework of trove installation module. New
