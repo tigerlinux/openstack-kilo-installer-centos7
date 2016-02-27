@@ -1,5 +1,5 @@
 Installer Version:
 
-1.0.11.el7 "Leopardus Pardalis"
+1.0.12.el7 "Leopardus Pardalis"
 
 ONLY FOR OPENSTACK 2015.1 "KILO"
