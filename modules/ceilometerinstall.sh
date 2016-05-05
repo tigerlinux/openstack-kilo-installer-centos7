@@ -293,7 +293,7 @@ fi
 # Ceilometer User need to be part of nova and qemu/kvm/libvirt groups
 #
 
-usermod -G qemu,kvm,nova ceilometer > /dev/null 2>&1
+usermod -a -G libvirt,nova,kvm,qemu ceilometer > /dev/null 2>&1
 
 #
 # With all configuration done, we proceed to make IPTABLES changes and start ceilometer services

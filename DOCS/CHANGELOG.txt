@@ -1,3 +1,7 @@
+1.0.13.el7 - May 04, 2016
+
+- Minor corrections on Ceilometer install module
+
 1.0.12.el7 - February 27, 2016
 
 - Extra changes on trove install module regarding
